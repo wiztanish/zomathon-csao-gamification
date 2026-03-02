@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weird Combo Leaderboard 🔥</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #181818;
+    --border: #2a2a2a;
+    --orange: #ff5c00;
+    --yellow: #ffe135;
+    --green: #00e87a;
+    --red: #ff2d55;
+    --white: #f5f5f0;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky; top: 0;
+    background: var(--black);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .logo span { color: var(--orange); }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .nav-tab {
+    padding: 0.4rem 1.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    border-right: 1px solid var(--border);
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .nav-tab:last-child { border-right: none; }
+  .nav-tab.active, .nav-tab:hover {
+    background: var(--orange);
+    color: var(--black);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    color: var(--green);
+    text-transform: uppercase;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  /* MAIN LAYOUT */
+  .app { display: grid; grid-template-columns: 1fr 360px; min-height: calc(100vh - 64px); }
+
+  /* LEFT PANEL */
+  .left-panel { border-right: 1px solid var(--border); }
+
+  /* CART SECTION */
+  .section-label {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cart-area { padding: 1.5rem; }
+
+  .cart-items { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; }
+
+  .cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--orange);
+    font-size: 0.8rem;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .cart-item-name { font-weight: 700; }
+  .cart-item-meta { color: var(--muted); font-size: 0.65rem; margin-top: 2px; }
+  .cart-item-price { color: var(--orange); font-size: 0.85rem; }
+
+  .remove-btn {
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 1rem; padding: 0 0.3rem;
+    transition: color 0.2s;
+  }
+  .remove-btn:hover { color: var(--red); }
+
+  /* ADD ITEM */
+  .add-item-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .item-select {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 0.6rem 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    outline: none;
+    cursor: pointer;
+  }
+  .item-select:focus { border-color: var(--orange); }
+
+  .add-btn {
+    padding: 0.6rem 1.2rem;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .add-btn:hover { transform: scale(1.03); }
+  .add-btn:active { transform: scale(0.97); }
+
+  /* WEIRDNESS METER */
+  .weirdness-box {
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+    background: var(--card);
+    margin-bottom: 1rem;
+  }
+
+  .weirdness-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 0.8rem;
+  }
+  .weirdness-label {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .weirdness-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    line-height: 1;
+    transition: color 0.5s;
+  }
+  .weirdness-tier {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .meter-bar {
+    height: 6px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .meter-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1), background 0.5s;
+    background: var(--green);
+  }
+
+  /* DARE PROMPT */
+  .dare-prompt {
+    border: 2px solid var(--orange);
+    padding: 1rem;
+    background: rgba(255,92,0,0.05);
+    display: none;
+    animation: flashIn 0.4s ease;
+  }
+  @keyframes flashIn {
+    0% { opacity: 0; transform: scale(0.97); }
+    60% { transform: scale(1.01); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .dare-prompt.visible { display: block; }
+
+  .dare-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--orange);
+    letter-spacing: 1px;
+    margin-bottom: 0.3rem;
+  }
+  .dare-subtitle { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.8rem; line-height: 1.5; }
+
+  .dare-actions { display: flex; gap: 0.5rem; }
+  .dare-accept {
+    flex: 1;
+    padding: 0.6rem;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .dare-accept:hover { transform: scale(1.02); }
+  .dare-decline {
+    padding: 0.6rem 1rem;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .dare-decline:hover { color: var(--white); }
+
+  /* RECOMMENDATIONS */
+  .recs-area { padding: 1.5rem; border-top: 1px solid var(--border); }
+
+  .recs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
+
+  .rec-card {
+    border: 1px solid var(--border);
+    padding: 0.8rem 0.6rem;
+    background: var(--card);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .rec-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--orange);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .rec-card:hover::before { opacity: 0.07; }
+  .rec-card:hover { border-color: var(--orange); transform: translateY(-2px); }
+
+  .rec-card.dare-card { border-color: var(--orange); background: rgba(255,92,0,0.06); }
+  .rec-card.dare-card .rec-badge { background: var(--orange); color: var(--black); }
+
+  .rec-emoji { font-size: 1.6rem; margin-bottom: 0.3rem; display: block; }
+  .rec-name { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px; line-height: 1.3; }
+  .rec-price { font-size: 0.6rem; color: var(--muted); margin-top: 0.2rem; }
+  .rec-badge {
+    position: absolute; top: 4px; right: 4px;
+    font-size: 0.45rem;
+    letter-spacing: 1px;
+    padding: 1px 4px;
+    background: var(--border);
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* CART SUMMARY */
+  .cart-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--card);
+  }
+  .cart-total { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; }
+  .cart-total span { color: var(--orange); }
+
+  .order-btn {
+    padding: 0.6rem 2rem;
+    background: var(--white);
+    color: var(--black);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .order-btn:hover { background: var(--yellow); }
+
+  /* RIGHT PANEL - LEADERBOARD */
+  .right-panel { display: flex; flex-direction: column; }
+
+  .leaderboard-header {
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .lb-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+  }
+
+  .filter-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-btn {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.55rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    transition: all 0.2s;
+  }
+  .filter-btn:last-child { border-right: none; }
+  .filter-btn.active, .filter-btn:hover { background: var(--card); color: var(--white); }
+
+  .leaderboard-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .leaderboard-list::-webkit-scrollbar { width: 3px; }
+  .leaderboard-list::-webkit-scrollbar-track { background: transparent; }
+  .leaderboard-list::-webkit-scrollbar-thumb { background: var(--border); }
+
+  .lb-entry {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    animation: slideIn 0.3s ease;
+  }
+  .lb-entry:hover { border-color: var(--orange); background: rgba(255,92,0,0.05); }
+
+  .lb-rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    line-height: 1;
+    min-width: 32px;
+    text-align: center;
+  }
+  .lb-rank.gold { color: var(--yellow); }
+  .lb-rank.silver { color: #aaa; }
+  .lb-rank.bronze { color: #cd7f32; }
+  .lb-rank.other { color: var(--border); }
+
+  .lb-info { flex: 1; }
+  .lb-combo-name { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .lb-combo-items { font-size: 0.6rem; color: var(--muted); }
+
+  .lb-scores { text-align: right; }
+  .lb-weird-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+  .lb-likes { font-size: 0.6rem; color: var(--muted); }
+
+  .lb-weird-badge {
+    font-size: 0.55rem;
+    letter-spacing: 1px;
+    padding: 2px 5px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  /* SUBMIT SECTION */
+  .submit-area {
+    border-top: 1px solid var(--border);
+    padding: 1rem;
+  }
+
+  .submit-title {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .submit-form { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .submit-input {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 0.5rem 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    outline: none;
+    width: 100%;
+  }
+  .submit-input:focus { border-color: var(--orange); }
+
+  .submit-btn {
+    width: 100%;
+    padding: 0.6rem;
+    background: var(--orange);
+    color: var(--black);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .submit-btn:hover { transform: scale(1.01); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--dark);
+    border: 1px solid var(--orange);
+    padding: 2rem;
+    max-width: 440px;
+    width: 90%;
+    animation: flashIn 0.3s ease;
+  }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--orange);
+    letter-spacing: 2px;
+    margin-bottom: 0.3rem;
+  }
+  .modal-subtitle { font-size: 0.7rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+
+  .modal-score-display {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .score-box {
+    flex: 1;
+    border: 1px solid var(--border);
+    padding: 1rem;
+    text-align: center;
+    background: var(--card);
+  }
+  .score-box-label { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .score-box-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    line-height: 1.1;
+  }
+
+  .modal-close {
+    width: 100%;
+    padding: 0.7rem;
+    background: var(--white);
+    color: var(--black);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 1.5rem; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--card);
+    border: 1px solid var(--orange);
+    padding: 0.8rem 1.5rem;
+    font-size: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    transition: transform 0.3s ease;
+    z-index: 300;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Scrollbar for whole page */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .right-panel { border-top: 1px solid var(--border); }
+    .recs-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">WEIRD<span>EATS</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active">Cart</button>
+    <button class="nav-tab">Explore</button>
+    <button class="nav-tab">My Combos</button>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+  </div>
+</header>
+
+<div class="app">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="section-label">
+      <span>YOUR CART</span>
+      <span id="item-count">0 items</span>
+    </div>
+
+    <div class="cart-area">
+      <div class="cart-items" id="cart-items">
+        <div style="color: var(--muted); font-size: 0.7rem; padding: 1rem 0; text-align: center;">Add items to get started →</div>
+      </div>
+
+      <div class="add-item-row">
+        <select class="item-select" id="item-select">
+          <option value="">Choose an item...</option>
+          <option value="biryani|🍛|Chicken Biryani|₹280|Main">biryani|🍛|Chicken Biryani|₹280|Main</option>
+          <option value="pizza|🍕|Pepperoni Pizza|₹320|Main">pizza|🍕|Pepperoni Pizza|₹320|Main</option>
+          <option value="gulab|🍮|Gulab Jamun|₹80|Dessert">gulab|🍮|Gulab Jamun|₹80|Dessert</option>
+          <option value="chai|🍵|Masala Chai|₹40|Beverage">chai|🍵|Masala Chai|₹40|Beverage</option>
+          <option value="burger|🍔|Zinger Burger|₹199|Main">burger|🍔|Zinger Burger|₹199|Main</option>
+          <option value="mango|🥭|Mango Lassi|₹90|Beverage">mango|🥭|Mango Lassi|₹90|Beverage</option>
+          <option value="fries|🍟|Masala Fries|₹110|Snack">fries|🍟|Masala Fries|₹110|Snack</option>
+          <option value="icecream|🍦|Vanilla Soft Serve|₹60|Dessert">icecream|🍦|Vanilla Soft Serve|₹60|Dessert</option>
+          <option value="salan|🥣|Mirchi Salan|₹70|Side">salan|🥣|Mirchi Salan|₹70|Side</option>
+          <option value="noodles|🍜|Schezwan Noodles|₹180|Main">noodles|🍜|Schezwan Noodles|₹180|Main</option>
+        </select>
+        <button class="add-btn" onclick="addItem()">+ ADD</button>
+      </div>
+
+      <!-- WEIRDNESS METER -->
+      <div class="weirdness-box">
+        <div class="weirdness-header">
+          <div>
+            <div class="weirdness-label">Weirdness Score</div>
+            <div class="weirdness-tier" id="weirdness-tier" style="color: var(--muted);">— Empty cart</div>
+          </div>
+          <div class="weirdness-score" id="weirdness-score" style="color: var(--muted);">0</div>
+        </div>
+        <div class="meter-bar"><div class="meter-fill" id="meter-fill"></div></div>
+      </div>
+
+      <!-- DARE PROMPT -->
+      <div class="dare-prompt" id="dare-prompt">
+        <div class="dare-title">🔥 WILD COMBO DETECTED!</div>
+        <div class="dare-subtitle" id="dare-text">This is a seriously unusual combination. Join the leaderboard — are you brave enough to try it?</div>
+        <div class="dare-actions">
+          <button class="dare-accept" onclick="acceptDare()">✓ I'M IN — ORDER IT</button>
+          <button class="dare-decline" onclick="declineDare()">Nah</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="recs-area">
+      <div class="section-label" style="padding: 0; margin-bottom: 0.8rem;">
+        <span>RECOMMENDED ADD-ONS</span>
+        <span style="color: var(--orange);">CSAO RAIL</span>
+      </div>
+      <div class="recs-grid" id="recs-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- CART SUMMARY -->
+    <div class="cart-summary">
+      <div>
+        <div style="font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);">Cart Total</div>
+        <div class="cart-total">₹<span id="cart-total">0</span></div>
+      </div>
+      <button class="order-btn" onclick="placeOrder()">PLACE ORDER →</button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL - LEADERBOARD -->
+  <div class="right-panel">
+    <div class="leaderboard-header">
+      <div class="lb-title">🏆 COMBO BOARD</div>
+      <div class="live-badge"><div class="live-dot"></div>142 active</div>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+      <button class="filter-btn" onclick="setFilter('legendary',this)">Legendary</button>
+      <button class="filter-btn" onclick="setFilter('bold',this)">Bold</button>
+      <button class="filter-btn" onclick="setFilter('mild',this)">Mild</button>
+    </div>
+
+    <div class="leaderboard-list" id="leaderboard-list">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <div class="submit-title">Submit Your Combo</div>
+      <div class="submit-form">
+        <input class="submit-input" id="combo-name-input" placeholder="Name your combo (e.g. 'The Monsoon Disaster')">
+        <button class="submit-btn" onclick="submitCombo()">SUBMIT TO LEADERBOARD →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">COMBO SUBMITTED!</div>
+    <div class="modal-subtitle" id="modal-subtitle">Your weird combo is now live on the leaderboard. The community will judge.</div>
+    <div class="modal-score-display">
+      <div class="score-box">
+        <div class="score-box-label">Weirdness</div>
+        <div class="score-box-val" id="modal-weird" style="color: var(--orange);">0</div>
+      </div>
+      <div class="score-box">
+        <div class="score-box-label">Taste Match</div>
+        <div class="score-box-val" id="modal-taste" style="color: var(--green);">0</div>
+      </div>
+      <div class="score-box">
+        <div class="score-box-label">Combo Rank</div>
+        <div class="score-box-val" id="modal-rank" style="color: var(--yellow);">#–</div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeModal()">CLOSE & VIEW LEADERBOARD</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── DATA ──────────────────────────────────────────────────────────
+  const ALL_ITEMS = {
+    biryani:  { emoji: '🍛', name: 'Chicken Biryani', price: 280, cat: 'Main', flavor: 'spicy' },
+    pizza:    { emoji: '🍕', name: 'Pepperoni Pizza', price: 320, cat: 'Main', flavor: 'savory' },
+    gulab:    { emoji: '🍮', name: 'Gulab Jamun', price: 80, cat: 'Dessert', flavor: 'sweet' },
+    chai:     { emoji: '🍵', name: 'Masala Chai', price: 40, cat: 'Beverage', flavor: 'spiced' },
+    burger:   { emoji: '🍔', name: 'Zinger Burger', price: 199, cat: 'Main', flavor: 'savory' },
+    mango:    { emoji: '🥭', name: 'Mango Lassi', price: 90, cat: 'Beverage', flavor: 'sweet' },
+    fries:    { emoji: '🍟', name: 'Masala Fries', price: 110, cat: 'Snack', flavor: 'spicy' },
+    icecream: { emoji: '🍦', name: 'Vanilla Soft Serve', price: 60, cat: 'Dessert', flavor: 'sweet' },
+    salan:    { emoji: '🥣', name: 'Mirchi Salan', price: 70, cat: 'Side', flavor: 'spicy' },
+    noodles:  { emoji: '🍜', name: 'Schezwan Noodles', price: 180, cat: 'Main', flavor: 'spicy' },
+  };
+
+  const WEIRD_PAIRS = {
+    'biryani+icecream': 88, 'biryani+gulab': 45, 'pizza+chai': 72,
+    'pizza+mango': 65, 'burger+gulab': 58, 'noodles+gulab': 80,
+    'biryani+pizza': 90, 'burger+icecream': 40, 'pizza+icecream': 55,
+    'noodles+chai': 35, 'biryani+mango': 30, 'fries+icecream': 38,
+  };
+
+  // COMPLEMENTARY RECS by cart content
+  const COMPLEMENT_RECS = {
+    biryani: ['salan','gulab','mango','chai'],
+    pizza:   ['fries','mango','icecream','chai'],
+    burger:  ['fries','mango','icecream','chai'],
+    noodles: ['fries','mango','chai','icecream'],
+    default: ['chai','fries','icecream','gulab'],
+  };
+
+  let cart = [];
+  let currentFilter = 'all';
+
+  const LEADERBOARD_DATA = [
+    { name: 'The Biryani Ice Cream Disaster', items: ['Biryani', 'Soft Serve', 'Mirchi Salan'], weird: 94, taste: 12, likes: 2341, user: '@spicy_nerd' },
+    { name: 'Chai & Pepperoni Sunset', items: ['Pepperoni Pizza', 'Masala Chai', 'Gulab Jamun'], weird: 78, taste: 45, likes: 1899, user: '@foodchaos' },
+    { name: 'Schezwan Gulab Experiment', items: ['Schezwan Noodles', 'Gulab Jamun'], weird: 81, taste: 22, likes: 1654, user: '@noodlemaster' },
+    { name: 'Mango Pizza Sunday', items: ['Pepperoni Pizza', 'Mango Lassi', 'Masala Fries'], weird: 67, taste: 55, likes: 1432, user: '@mangolover' },
+    { name: 'The Burger Dessert Stack', items: ['Zinger Burger', 'Gulab Jamun', 'Masala Chai'], weird: 58, taste: 61, likes: 1200, user: '@burgerqueen' },
+    { name: 'Biryani Pizza Fusion', items: ['Chicken Biryani', 'Pepperoni Pizza'], weird: 91, taste: 18, likes: 1100, user: '@fusion_king' },
+    { name: 'Chai & Ice Cream Float', items: ['Masala Chai', 'Vanilla Soft Serve'], weird: 44, taste: 72, likes: 987, user: '@desi_dessert' },
+    { name: 'Fries & Lassi Duo', items: ['Masala Fries', 'Mango Lassi'], weird: 32, taste: 80, likes: 820, user: '@classic_twist' },
+  ];
+
+  // ── CART LOGIC ────────────────────────────────────────────────────
+  function addItem() {
+    const sel = document.getElementById('item-select');
+    const val = sel.value;
+    if (!val) return;
+
+    const [key] = val.split('|');
+    const item = ALL_ITEMS[key];
+    if (!item) return;
+    if (cart.find(c => c.key === key)) { showToast('Already in cart!'); return; }
+
+    cart.push({ key, ...item });
+    sel.value = '';
+    renderCart();
+    updateWeirdness();
+    updateRecs();
+  }
+
+  function removeItem(key) {
+    cart = cart.filter(c => c.key !== key);
+    renderCart();
+    updateWeirdness();
+    updateRecs();
+  }
+
+  function renderCart() {
+    const el = document.getElementById('cart-items');
+    const countEl = document.getElementById('item-count');
+    const totalEl = document.getElementById('cart-total');
+
+    if (cart.length === 0) {
+      el.innerHTML = '<div style="color: var(--muted); font-size: 0.7rem; padding: 1rem 0; text-align: center;">Add items to get started →</div>';
+      countEl.textContent = '0 items';
+      totalEl.textContent = '0';
+      return;
+    }
+
+    let total = 0;
+    el.innerHTML = cart.map(item => {
+      total += item.price;
+      return `<div class="cart-item">
+        <div>
+          <div class="cart-item-name">${item.emoji} ${item.name}</div>
+          <div class="cart-item-meta">${item.cat}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.8rem">
+          <div class="cart-item-price">${item.price}</div>
+          <button class="remove-btn" onclick="removeItem('${item.key}')">×</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    countEl.textContent = `${cart.length} item${cart.length > 1 ? 's' : ''}`;
+    totalEl.textContent = total;
+  }
+
+  // ── WEIRDNESS ENGINE ──────────────────────────────────────────────
+  function computeWeirdness() {
+    if (cart.length < 2) return 0;
+
+    let maxScore = 0;
+    const keys = cart.map(c => c.key);
+
+    // check pairs
+    for (let i = 0; i < keys.length; i++) {
+      for (let j = i + 1; j < keys.length; j++) {
+        const pair1 = `${keys[i]}+${keys[j]}`;
+        const pair2 = `${keys[j]}+${keys[i]}`;
+        const s = WEIRD_PAIRS[pair1] || WEIRD_PAIRS[pair2] || 0;
+        maxScore = Math.max(maxScore, s);
+      }
+    }
+
+    // category diversity bonus
+    const cats = [...new Set(cart.map(c => c.cat))];
+    if (cats.length >= 3) maxScore = Math.min(100, maxScore + 10);
+
+    // dessert + main = inherently weird
+    if (cats.includes('Dessert') && cats.includes('Main') && !maxScore) maxScore = 30;
+
+    return maxScore;
+  }
+
+  function updateWeirdness() {
+    const score = computeWeirdness();
+    const scoreEl = document.getElementById('weirdness-score');
+    const tierEl = document.getElementById('weirdness-tier');
+    const fill = document.getElementById('meter-fill');
+    const darePrompt = document.getElementById('dare-prompt');
+
+    scoreEl.textContent = score;
+    fill.style.width = score + '%';
+
+    if (score === 0) {
+      scoreEl.style.color = 'var(--muted)';
+      fill.style.background = 'var(--border)';
+      tierEl.style.color = 'var(--muted)';
+      tierEl.textContent = cart.length < 2 ? '— Add more items' : '— Normal combo';
+      darePrompt.classList.remove('visible');
+    } else if (score < 40) {
+      scoreEl.style.color = 'var(--green)';
+      fill.style.background = 'var(--green)';
+      tierEl.style.color = 'var(--green)';
+      tierEl.textContent = '🟢 Mild Weird';
+      darePrompt.classList.remove('visible');
+    } else if (score < 70) {
+      scoreEl.style.color = 'var(--yellow)';
+      fill.style.background = 'var(--yellow)';
+      tierEl.style.color = 'var(--yellow)';
+      tierEl.textContent = '🟡 Bold Combo';
+      showDarePrompt(score);
+    } else {
+      scoreEl.style.color = 'var(--orange)';
+      fill.style.background = 'linear-gradient(90deg, var(--orange), var(--red))';
+      tierEl.style.color = 'var(--orange)';
+      tierEl.textContent = '🔥 LEGENDARY WEIRD';
+      showDarePrompt(score);
+    }
+  }
+
+  function showDarePrompt(score) {
+    const prompt = document.getElementById('dare-prompt');
+    const text = document.getElementById('dare-text');
+    if (score >= 70) {
+      text.textContent = 'Only ' + Math.floor(Math.random()*3+1) + '% of users have tried this combination. This could be a legendary submission. Are you brave enough?';
+    } else {
+      text.textContent = 'This is an unusual combination. Dare to try it and submit to the leaderboard for community judgment!';
+    }
+    prompt.classList.add('visible');
+  }
+
+  function acceptDare() {
+    placeOrder();
+  }
+
+  function declineDare() {
+    document.getElementById('dare-prompt').classList.remove('visible');
+    showToast('Maybe next time... 👀');
+  }
+
+  // ── RECOMMENDATIONS ───────────────────────────────────────────────
+  function updateRecs() {
+    const grid = document.getElementById('recs-grid');
+    if (cart.length === 0) {
+      grid.innerHTML = '<div style="color:var(--muted);font-size:0.65rem;grid-column:span 4;padding:1rem 0;text-align:center">Add items to see recommendations</div>';
+      return;
+    }
+
+    const cartKeys = cart.map(c => c.key);
+    const mainItem = cartKeys[0];
+
+    // get complements
+    let recs = (COMPLEMENT_RECS[mainItem] || COMPLEMENT_RECS.default)
+      .filter(k => !cartKeys.includes(k))
+      .slice(0, 3);
+
+    // dare slot: find something weird
+    const allKeys = Object.keys(ALL_ITEMS);
+    let dareSlot = allKeys.find(k => {
+      if (cartKeys.includes(k) || recs.includes(k)) return false;
+      const pair = `${mainItem}+${k}`;
+      const pair2 = `${k}+${mainItem}`;
+      return (WEIRD_PAIRS[pair] || WEIRD_PAIRS[pair2] || 0) > 50;
+    });
+    if (!dareSlot) {
+      dareSlot = allKeys.find(k => !cartKeys.includes(k) && !recs.includes(k));
+    }
+
+    grid.innerHTML = recs.map(k => {
+      const item = ALL_ITEMS[k];
+      return `<div class="rec-card" onclick="addRecommended('${k}')">
+        <span class="rec-badge">Rec</span>
+        <span class="rec-emoji">${item.emoji}</span>
+        <div class="rec-name">${item.name}</div>
+        <div class="rec-price">₹${item.price}</div>
+      </div>`;
+    }).join('') + (dareSlot ? `<div class="rec-card dare-card" onclick="addRecommended('${dareSlot}')">
+        <span class="rec-badge">DARE</span>
+        <span class="rec-emoji">${ALL_ITEMS[dareSlot].emoji}</span>
+        <div class="rec-name">${ALL_ITEMS[dareSlot].name}</div>
+        <div class="rec-price">₹${ALL_ITEMS[dareSlot].price}</div>
+      </div>` : '');
+  }
+
+  function addRecommended(key) {
+    if (cart.find(c => c.key === key)) { showToast('Already in cart!'); return; }
+    cart.push({ key, ...ALL_ITEMS[key] });
+    renderCart();
+    updateWeirdness();
+    updateRecs();
+    showToast(`${ALL_ITEMS[key].emoji} ${ALL_ITEMS[key].name} added!`);
+  }
+
+  // ── ORDER FLOW ────────────────────────────────────────────────────
+  function placeOrder() {
+    if (cart.length === 0) { showToast('Add some items first!'); return; }
+    const score = computeWeirdness();
+    if (score >= 40) {
+      // auto-show submit
+      showToast('🎉 Order placed! Submit your combo below.');
+      document.getElementById('dare-prompt').classList.remove('visible');
+    } else {
+      showToast('✅ Order placed successfully!');
+    }
+  }
+
+  function submitCombo() {
+    if (cart.length < 2) { showToast('Add at least 2 items!'); return; }
+    const name = document.getElementById('combo-name-input').value.trim();
+    if (!name) { showToast('Name your combo first!'); return; }
+
+    const score = computeWeirdness();
+    const taste = Math.max(5, 100 - score + Math.floor(Math.random() * 20 - 10));
+    const newEntry = {
+      name,
+      items: cart.map(c => c.name),
+      weird: score,
+      taste,
+      likes: Math.floor(Math.random() * 50) + 1,
+      user: '@you',
+      isNew: true
+    };
+
+    LEADERBOARD_DATA.unshift(newEntry);
+    LEADERBOARD_DATA.sort((a, b) => b.weird - a.weird);
+    const rank = LEADERBOARD_DATA.findIndex(e => e.name === name) + 1;
+
+    renderLeaderboard();
+    document.getElementById('combo-name-input').value = '';
+    showModal(name, score, taste, rank);
+  }
+
+  // ── LEADERBOARD ───────────────────────────────────────────────────
+  function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderLeaderboard();
+  }
+
+  function getWeirdColor(score) {
+    if (score >= 70) return 'var(--orange)';
+    if (score >= 40) return 'var(--yellow)';
+    return 'var(--green)';
+  }
+  function getWeirdLabel(score) {
+    if (score >= 70) return '🔥 LEGENDARY';
+    if (score >= 40) return '⚡ BOLD';
+    return '✓ MILD';
+  }
+  function getWeirdLabelColor(score) {
+    if (score >= 70) return 'color:var(--orange);border:1px solid var(--orange)';
+    if (score >= 40) return 'color:var(--yellow);border:1px solid var(--yellow)';
+    return 'color:var(--green);border:1px solid var(--green)';
+  }
+
+  function renderLeaderboard() {
+    let data = [...LEADERBOARD_DATA];
+    if (currentFilter === 'legendary') data = data.filter(e => e.weird >= 70);
+    else if (currentFilter === 'bold') data = data.filter(e => e.weird >= 40 && e.weird < 70);
+    else if (currentFilter === 'mild') data = data.filter(e => e.weird < 40);
+
+    const rankClasses = ['gold', 'silver', 'bronze'];
+
+    document.getElementById('leaderboard-list').innerHTML = data.map((entry, i) => {
+      const rankClass = i < 3 ? rankClasses[i] : 'other';
+      return `<div class="lb-entry" onclick="likeEntry(${LEADERBOARD_DATA.indexOf(entry)})">
+        <div class="lb-rank ${rankClass}">${i + 1}</div>
+        <div class="lb-info">
+          <div class="lb-combo-name">${entry.name} ${entry.isNew ? '<span style="color:var(--orange);font-size:0.55rem">NEW</span>' : ''}</div>
+          <div class="lb-combo-items">${entry.items.join(' + ')}</div>
+          <div style="margin-top:4px"><span class="lb-weird-badge" style="${getWeirdLabelColor(entry.weird)}">${getWeirdLabel(entry.weird)}</span></div>
+        </div>
+        <div class="lb-scores">
+          <div class="lb-weird-score" style="color:${getWeirdColor(entry.weird)}">${entry.weird}</div>
+          <div class="lb-likes">♥ ${entry.likes.toLocaleString()}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function likeEntry(idx) {
+    LEADERBOARD_DATA[idx].likes++;
+    renderLeaderboard();
+  }
+
+  // ── MODAL ─────────────────────────────────────────────────────────
+  function showModal(name, weird, taste, rank) {
+    document.getElementById('modal-title').textContent = '🔥 COMBO SUBMITTED!';
+    document.getElementById('modal-subtitle').textContent = `"${name}" is now live. The community will judge your food choices.`;
+    document.getElementById('modal-weird').textContent = weird;
+    document.getElementById('modal-taste').textContent = taste;
+    document.getElementById('modal-rank').textContent = '#' + rank;
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  // ── TOAST ─────────────────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ── FIX SELECT DISPLAY ────────────────────────────────────────────
+  document.getElementById('item-select').querySelectorAll('option').forEach(opt => {
+    if (opt.value) {
+      const parts = opt.value.split('|');
+      opt.textContent = `${parts[1]} ${parts[2]} — ₹${parts[3]}`;
+    }
+  });
+
+  // ── INIT ──────────────────────────────────────────────────────────
+  renderLeaderboard();
+  updateRecs();
+</script>
+</body>
+</html>
