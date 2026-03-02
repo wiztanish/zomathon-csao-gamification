@@ -152,21 +152,133 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
 .dare-cta:hover{background:var(--red-dark)}
 .dare-skip{width:100%;padding:.4rem;background:transparent;color:var(--text2);border:none;font-family:inherit;font-size:.75rem;cursor:pointer}
 
-/* RECS */
+/* ─── DARE ADD-ON CARD ─── */
+.dare-addon-card{
+  margin-bottom:1rem;
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  background:linear-gradient(135deg,#0f0f0f 0%,#1a0a00 50%,#0f0505 100%);
+  box-shadow:0 8px 32px rgba(249,115,22,.35), 0 2px 8px rgba(0,0,0,.3);
+  animation:dare-appear .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes dare-appear{
+  from{opacity:0;transform:scale(.92) translateY(8px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+/* animated fire border */
+.dare-addon-card::before{
+  content:'';
+  position:absolute;inset:-2px;
+  border-radius:20px;
+  background:linear-gradient(90deg,#f97316,#e23744,#f59e0b,#e23744,#f97316);
+  background-size:300% 100%;
+  animation:fire-border 2s linear infinite;
+  z-index:0;
+}
+@keyframes fire-border{
+  0%{background-position:0% 50%}
+  100%{background-position:300% 50%}
+}
+.dare-addon-inner{
+  position:relative;z-index:1;
+  margin:2px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#18080a,#1f1008);
+  padding:1rem;
+}
+/* floating sparks */
+.dare-sparks{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;border-radius:16px}
+.spark{position:absolute;width:3px;height:3px;border-radius:50%;animation:float-up linear infinite;opacity:0}
+@keyframes float-up{
+  0%{opacity:0;transform:translateY(0) scale(1)}
+  20%{opacity:1}
+  80%{opacity:.6}
+  100%{opacity:0;transform:translateY(-60px) scale(0.3)}
+}
+.dare-addon-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
+.dare-addon-label{
+  display:flex;align-items:center;gap:.4rem;
+  font-size:.65rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:#f97316;
+}
+.dare-flame-icon{font-size:1rem;animation:flicker .8s ease-in-out infinite alternate}
+@keyframes flicker{from{transform:scale(1) rotate(-3deg)}to{transform:scale(1.15) rotate(3deg)}}
+.dare-weird-score{
+  display:flex;align-items:center;gap:.3rem;
+  background:rgba(249,115,22,.15);
+  border:1px solid rgba(249,115,22,.4);
+  border-radius:20px;
+  padding:.2rem .6rem;
+}
+.dare-weird-num{font-size:.9rem;font-weight:800;color:#f97316}
+.dare-weird-lbl{font-size:.55rem;color:rgba(249,115,22,.7);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+.dare-addon-body{display:flex;align-items:center;gap:.9rem;margin-bottom:.8rem}
+.dare-item-emoji{
+  font-size:2.6rem;
+  filter:drop-shadow(0 0 8px rgba(249,115,22,.6));
+  animation:glow-pulse 2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes glow-pulse{
+  0%,100%{filter:drop-shadow(0 0 6px rgba(249,115,22,.5))}
+  50%{filter:drop-shadow(0 0 14px rgba(249,115,22,.9))}
+}
+.dare-item-info{flex:1}
+.dare-item-name{font-size:.95rem;font-weight:800;color:#fff;margin-bottom:.2rem;line-height:1.2}
+.dare-item-rest{font-size:.65rem;color:rgba(255,255,255,.45);margin-bottom:.3rem}
+.dare-item-price{font-size:.8rem;font-weight:700;color:#f97316}
+.dare-item-desc{font-size:.68rem;color:rgba(255,255,255,.5);line-height:1.4;margin-top:.2rem}
+
+.dare-item-stats{display:flex;gap:.5rem;margin-bottom:.7rem}
+.dare-stat{
+  flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;padding:.4rem .5rem;text-align:center;
+}
+.dare-stat-val{font-size:.78rem;font-weight:800;color:#f97316}
+.dare-stat-lbl{font-size:.52rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px}
+
+.dare-add-btn{
+  width:100%;padding:.75rem;
+  background:linear-gradient(135deg,#f97316,#e23744);
+  color:#fff;border:none;border-radius:12px;
+  font-family:inherit;font-size:.9rem;font-weight:800;
+  cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  letter-spacing:.3px;
+  box-shadow:0 4px 16px rgba(249,115,22,.4);
+  position:relative;overflow:hidden;
+}
+.dare-add-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.dare-add-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(249,115,22,.55)}
+.dare-add-btn:hover::before{opacity:1}
+.dare-add-btn:active{transform:translateY(0)}
+.dare-add-btn.added{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 16px rgba(34,197,94,.4)}
+
+.dare-skip-link{
+  width:100%;margin-top:.4rem;padding:.3rem;
+  background:none;border:none;color:rgba(255,255,255,.3);
+  font-family:inherit;font-size:.7rem;cursor:pointer;transition:color .2s;
+  text-align:center;display:block;
+}
+.dare-skip-link:hover{color:rgba(255,255,255,.6)}
+
+/* normal recs strip below dare */
 .r-card{background:var(--white);border-radius:16px;box-shadow:var(--card-s);padding:.9rem 1.1rem;margin-bottom:1rem}
-.r-title{font-size:.82rem;font-weight:700;margin-bottom:.7rem;display:flex;align-items:center;gap:.4rem}
+.r-title{font-size:.78rem;font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;color:var(--text2)}
 .r-scroll{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.3rem}
 .r-scroll::-webkit-scrollbar{height:0}
-.rec-p{flex-shrink:0;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:.45rem .6rem;cursor:pointer;transition:all .15s;text-align:center;min-width:78px}
+.rec-p{flex-shrink:0;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:.45rem .6rem;cursor:pointer;transition:all .15s;text-align:center;min-width:76px}
 .rec-p:hover{border-color:var(--red);background:var(--red-light)}
-.rec-p.dare{border-color:var(--orange);background:#fff8f0}
-.rec-p.dare:hover{background:#ffede0}
-.rec-em{font-size:1.4rem;display:block;margin-bottom:.15rem}
-.rec-nm{font-size:.6rem;font-weight:600;line-height:1.2}
-.rec-pr{font-size:.58rem;color:var(--text2)}
-.rec-badge{font-size:.52rem;padding:.1rem .3rem;border-radius:3px;font-weight:700;display:inline-block;margin-top:.15rem}
-.rb-n{background:#e8f5e9;color:#2e7d32}
-.rb-d{background:#fff3e0;color:#e65100}
+.rec-em{font-size:1.3rem;display:block;margin-bottom:.1rem}
+.rec-nm{font-size:.58rem;font-weight:600;line-height:1.2;color:var(--text)}
+.rec-pr{font-size:.56rem;color:var(--text2)}
+.rec-badge{font-size:.5rem;padding:.08rem .28rem;border-radius:3px;font-weight:700;display:inline-block;margin-top:.1rem;background:#e8f5e9;color:#2e7d32}
 
 /* ─── LEADERBOARD ─── */
 #lb-view{display:none}
@@ -432,8 +544,11 @@ body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--b
         </div>
       </div>
     </div>
+    <!-- DARE ADD-ON (separate, bold card) -->
+    <div id="dare-addon-wrap" style="display:none"></div>
+
     <div class="r-card" id="r-card" style="display:none">
-      <div class="r-title">✨ Recommended Add-ons <span style="font-size:.62rem;color:var(--text3);font-weight:400">CSAO Rail</span></div>
+      <div class="r-title">✨ You might also like <span style="font-size:.6rem;color:var(--text3);font-weight:400;margin-left:.2rem">CSAO Rail</span></div>
       <div class="r-scroll" id="r-scroll"></div>
     </div>
   </div>
@@ -1222,33 +1337,141 @@ function skipDare() { document.getElementById('dare-box').classList.remove('vis'
 // ══════════════════════════════════════════════════════
 //  RECOMMENDATIONS
 // ══════════════════════════════════════════════════════
+let dareBlacklist = [];
+
+function pickDareId(cartIds) {
+  let dareId = null, dareScore = 0;
+  for (const cid of cartIds) {
+    for (const k of Object.keys(WEIRD_PAIRS)) {
+      const [a, b] = k.split('+');
+      const candidate = a === cid ? b : (b === cid ? a : null);
+      if (candidate && !cartIds.includes(candidate) && !dareBlacklist.includes(candidate) && WEIRD_PAIRS[k] > dareScore) {
+        dareScore = WEIRD_PAIRS[k]; dareId = candidate;
+      }
+    }
+  }
+  if (!dareId) {
+    const otherRestIds = [...new Set(RESTAURANTS.filter(r => !cart.some(c => c.restId === r.id)).map(r => r.id))];
+    for (const rid of otherRestIds) {
+      const rest = RESTAURANTS.find(r => r.id === rid);
+      const items = Object.values(rest.menu).flat();
+      const pick = items.find(it => !cartIds.includes(it.id) && !dareBlacklist.includes(it.id));
+      if (pick) { dareId = pick.id; dareScore = 30 + Math.floor(Math.random() * 25); break; }
+    }
+  }
+  return { dareId, dareScore };
+}
+
 function updateRecs() {
-  if (!cart.length) return;
+  const dareWrap = document.getElementById('dare-addon-wrap');
+  const rCard = document.getElementById('r-card');
+  const rScroll = document.getElementById('r-scroll');
+  if (!cart.length) { dareWrap.style.display='none'; rCard.style.display='none'; return; }
+
   const cartIds = cart.map(c => c.id);
+  const { dareId, dareScore } = pickDareId(cartIds);
+  renderDareCard(dareWrap, dareId, dareScore);
+
+  // normal recs
   const p = cart[0];
   let key = 'default';
   if (p.name.toLowerCase().includes('biryani')) key = 'biryani';
   else if (p.name.toLowerCase().includes('burger')) key = 'burger';
   else if (p.name.toLowerCase().includes('pizza')) key = 'pizza';
   else if (['🍦','🍮','🍫','🎂'].includes(p.emoji)) key = 'dessert';
+  const recs = (COMP_MAP[key]||COMP_MAP.default).filter(id=>!cartIds.includes(id)&&id!==dareId).slice(0,4);
+  if (recs.length) {
+    rCard.style.display = 'block';
+    rScroll.innerHTML = recs.map(id => {
+      const it = allItems[id]; if(!it) return '';
+      return `<div class="rec-p" onclick="addToCart('${id}')"><span class="rec-em">${it.emoji}</span><div class="rec-nm">${it.name}</div><div class="rec-pr">₹${it.price}</div><span class="rec-badge">+ ADD</span></div>`;
+    }).join('');
+  } else { rCard.style.display='none'; }
+}
 
-  const recs = (COMP_MAP[key]||COMP_MAP.default).filter(id=>!cartIds.includes(id)).slice(0,3);
-  let dareId = null;
-  for (const id of cartIds) {
-    for (const k of Object.keys(WEIRD_PAIRS)) {
-      const [a,b] = k.split('+');
-      if (a===id && !cartIds.includes(b)){dareId=b;break}
-      if (b===id && !cartIds.includes(a)){dareId=a;break}
-    }
-    if (dareId) break;
+function renderDareCard(wrap, dareId, dareScore) {
+  if (!dareId || !allItems[dareId]) { wrap.style.display='none'; return; }
+  const it = allItems[dareId];
+  const inCart = !!cart.find(c => c.id === dareId);
+  const crossRest = !cart.some(c => c.restId === it.restId);
+  const restName = RESTAURANTS.find(r => r.id === it.restId)?.name || it.restName;
+  const tasteScore = Math.max(5, 100 - dareScore + Math.floor(Math.random()*15-7));
+  const pctOrdered = Math.floor(Math.random()*4)+1;
+
+  const sparks = Array.from({length:10},(_,i)=>{
+    const cols=['#f97316','#e23744','#f59e0b','#ff6b35','#fb923c'];
+    return `<div class="spark" style="left:${8+i*9}%;bottom:${4+Math.random()*8}%;background:${cols[i%5]};animation-duration:${1.4+Math.random()*1.4}s;animation-delay:${Math.random()*2}s"></div>`;
+  }).join('');
+
+  wrap.style.display = 'block';
+  wrap.innerHTML = `
+    <div class="dare-addon-card">
+      <div class="dare-sparks">${sparks}</div>
+      <div class="dare-addon-inner">
+        <div class="dare-addon-header">
+          <div class="dare-addon-label">
+            <span class="dare-flame-icon">🔥</span>
+            DARE ADD-ON
+            ${crossRest?'<span style="font-size:.52rem;background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.4);color:#fb923c;padding:.1rem .35rem;border-radius:10px;letter-spacing:.5px">CROSS-RESTAURANT</span>':''}
+          </div>
+          <div class="dare-weird-score">
+            <span class="dare-weird-num">${dareScore}</span>
+            <span class="dare-weird-lbl">weird</span>
+          </div>
+        </div>
+        <div class="dare-addon-body">
+          <div class="dare-item-emoji">${it.emoji}</div>
+          <div class="dare-item-info">
+            <div class="dare-item-name">${it.name}</div>
+            <div class="dare-item-rest">from ${restName}</div>
+            <div class="dare-item-price">₹${it.price}</div>
+            <div class="dare-item-desc">${getDareDesc(it, cart, dareScore)}</div>
+          </div>
+        </div>
+        <div class="dare-item-stats">
+          <div class="dare-stat"><div class="dare-stat-val">${dareScore}</div><div class="dare-stat-lbl">Weirdness</div></div>
+          <div class="dare-stat"><div class="dare-stat-val">${tasteScore}</div><div class="dare-stat-lbl">Taste Est.</div></div>
+          <div class="dare-stat"><div class="dare-stat-val">${pctOrdered}%</div><div class="dare-stat-lbl">Tried This</div></div>
+        </div>
+        <button class="dare-add-btn ${inCart?'added':''}" id="dare-add-btn-main"
+          onclick="addDareItem('${dareId}')">
+          ${inCart ? '✓ In Cart — Dare Accepted!' : `<span style="font-size:1.1rem">🔥</span> Add Dare Item — ₹${it.price}`}
+        </button>
+        <button class="dare-skip-link" onclick="refreshDare()">Show me a different dare →</button>
+      </div>
+    </div>`;
+}
+
+function getDareDesc(item, cart, score) {
+  const main = cart[0];
+  const cross = !cart.some(c => c.restId === item.restId);
+  if (score >= 80) return `Pairing ${main.name} with this is one of the statistically rarest combos on the platform. Legends only.`;
+  if (score >= 60 && cross) return `A cross-restaurant experiment — ${main.name} meets ${item.name}. Nobody asked, but someone had to try.`;
+  if (score >= 60) return `${main.name} + ${item.name} is the kind of combo that ends friendships and starts cults.`;
+  return `Not many order this alongside their current cart. Maybe you'll be the one to make it famous.`;
+}
+
+function refreshDare() {
+  const btn = document.getElementById('dare-add-btn-main');
+  if (btn) {
+    const id = btn.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    if (id) dareBlacklist.push(id);
   }
+  const cartIds = cart.map(c => c.id);
+  const { dareId, dareScore } = pickDareId(cartIds);
+  if (!dareId) { dareBlacklist = []; updateRecs(); return; }
+  renderDareCard(document.getElementById('dare-addon-wrap'), dareId, dareScore);
+}
 
-  const scroll = document.getElementById('r-scroll');
-  scroll.innerHTML = recs.map(id => {
-    const it = allItems[id]; if (!it) return '';
-    return `<div class="rec-p" onclick="addToCart('${id}')"><span class="rec-em">${it.emoji}</span><div class="rec-nm">${it.name}</div><div class="rec-pr">₹${it.price}</div><span class="rec-badge rb-n">ADD</span></div>`;
-  }).join('') + (dareId && allItems[dareId] ? `
-    <div class="rec-p dare" onclick="addToCart('${dareId}')"><span class="rec-em">${allItems[dareId].emoji}</span><div class="rec-nm">${allItems[dareId].name}</div><div class="rec-pr">₹${allItems[dareId].price}</div><span class="rec-badge rb-d">🔥 DARE</span></div>` : '');
+function addDareItem(id) {
+  const it = allItems[id]; if (!it) return;
+  if (!cart.find(c => c.id === id)) cart.push({...it, qty:1});
+  renderCart(); updateWeird();
+  const btn = document.getElementById('dare-add-btn-main');
+  if (btn) { btn.classList.add('added'); btn.innerHTML = '✓ In Cart — Dare Accepted!'; }
+  if (currentRest) renderMenu(currentRest);
+  showToast(`🔥 ${it.emoji} Dare item added! Bold choice.`);
+  checkSimilarCombos();
 }
 
 // ══════════════════════════════════════════════════════
