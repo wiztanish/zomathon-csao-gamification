@@ -3,1102 +3,1586 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weird Combo Leaderboard 🔥</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>WeirdEats — Food Delivery + Combo Leaderboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --dark: #111111;
-    --card: #181818;
-    --border: #2a2a2a;
-    --orange: #ff5c00;
-    --yellow: #ffe135;
-    --green: #00e87a;
-    --red: #ff2d55;
-    --white: #f5f5f0;
-    --muted: #888;
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#e23744;--red-dark:#cb202d;--red-light:#fff0f1;
+  --orange:#f97316;--yellow:#f59e0b;--green:#22c55e;
+  --bg:#f8f8f8;--white:#ffffff;--text:#1c1c1c;--text2:#686b78;
+  --text3:#93959f;--border:#e8e8e8;--card-s:0 2px 12px rgba(0,0,0,.08);
+  --card-sh:0 4px 24px rgba(0,0,0,.14);
+}
+body{font-family:'Plus Jakarta Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:10px}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ─── HEADER ─── */
+.hdr{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.hdr-inner{max-width:1300px;margin:0 auto;padding:0 1.5rem;height:64px;display:flex;align-items:center;gap:1.2rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;flex-shrink:0}
+.logo-box{width:36px;height:36px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.logo-txt{font-size:1.3rem;font-weight:800;color:var(--red)}
+.logo-txt span{color:var(--text)}
 
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'Space Mono', monospace;
-    overflow-x: hidden;
-    cursor: default;
-  }
+.loc-btn{display:flex;align-items:center;gap:.4rem;cursor:pointer;padding:.4rem .8rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);white-space:nowrap;flex-shrink:0;transition:border-color .2s}
+.loc-btn:hover{border-color:var(--red)}
+.loc-city{font-weight:700;font-size:.85rem;border-bottom:2px dashed var(--text)}
+.loc-area{font-size:.7rem;color:var(--text2)}
 
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
+.hdr-search{flex:1;position:relative}
+.hdr-search input{width:100%;padding:.55rem 1rem .55rem 2.4rem;border:1px solid var(--border);border-radius:8px;font-size:.875rem;font-family:inherit;background:var(--bg);outline:none;color:var(--text);transition:border-color .2s,box-shadow .2s}
+.hdr-search input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(226,55,68,.08);background:var(--white)}
+.srch-ico{position:absolute;left:.7rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.9rem}
 
-  /* HEADER */
-  header {
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-    position: sticky; top: 0;
-    background: var(--black);
-    z-index: 100;
-  }
+.hdr-right{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+.btn{padding:.48rem 1rem;border-radius:8px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--text2)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red-dark)}
 
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    color: var(--white);
-  }
-  .logo span { color: var(--orange); }
+.cart-pill{display:flex;align-items:center;gap:.5rem;padding:.48rem 1.1rem;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s}
+.cart-pill:hover{background:var(--red-dark);transform:translateY(-1px)}
+.cart-count{background:#fff;color:var(--red);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800}
 
-  .nav-tabs {
-    display: flex;
-    gap: 0;
-    border: 1px solid var(--border);
-  }
-  .nav-tab {
-    padding: 0.4rem 1.2rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    background: transparent;
-    color: var(--muted);
-    border: none;
-    border-right: 1px solid var(--border);
-    transition: all 0.2s;
-    text-transform: uppercase;
-  }
-  .nav-tab:last-child { border-right: none; }
-  .nav-tab.active, .nav-tab:hover {
-    background: var(--orange);
-    color: var(--black);
-  }
+.user-pill{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border:1.5px solid var(--border);border-radius:20px;cursor:pointer;font-size:.82rem;font-weight:600;background:var(--white);transition:border-color .2s}
+.user-pill:hover{border-color:var(--red)}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800}
 
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+/* ─── LAYOUT ─── */
+.wrap{max-width:1300px;margin:0 auto;padding:1.5rem;display:grid;grid-template-columns:1fr 360px;gap:1.5rem;align-items:start}
 
-  .live-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-    color: var(--green);
-    text-transform: uppercase;
-  }
-  .live-dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.8); }
-  }
+/* ─── TABS ─── */
+.page-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.2rem}
+.page-tab{padding:.65rem 1.4rem;font-size:.875rem;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.page-tab.active{color:var(--red);border-bottom-color:var(--red)}
 
-  /* MAIN LAYOUT */
-  .app { display: grid; grid-template-columns: 1fr 360px; min-height: calc(100vh - 64px); }
+/* ─── FILTERS ─── */
+.filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.chip{padding:.38rem 1rem;border:1.5px solid var(--border);border-radius:20px;font-size:.78rem;font-weight:500;color:var(--text2);cursor:pointer;background:var(--white);transition:all .15s;font-family:inherit}
+.chip:hover{border-color:var(--red);color:var(--red)}
+.chip.active{background:var(--red-light);border-color:var(--red);color:var(--red);font-weight:700}
 
-  /* LEFT PANEL */
-  .left-panel { border-right: 1px solid var(--border); }
+/* ─── RESTAURANT GRID ─── */
+.sec-title{font-size:1.2rem;font-weight:800;color:var(--text);margin-bottom:.8rem}
+.sec-sub{font-size:.82rem;color:var(--text2);margin-top:.15rem;font-weight:400}
+.rest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.rest-card{background:var(--white);border-radius:16px;overflow:hidden;box-shadow:var(--card-s);cursor:pointer;transition:all .25s;border:1.5px solid transparent}
+.rest-card:hover{box-shadow:var(--card-sh);transform:translateY(-3px)}
+.rest-card.sel{border-color:var(--red);box-shadow:0 0 0 3px rgba(226,55,68,.12)}
+.rest-img{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3.5rem}
+.rest-info{padding:.8rem}
+.rest-name{font-size:.9rem;font-weight:700;margin-bottom:.15rem}
+.rest-cuis{font-size:.72rem;color:var(--text2);margin-bottom:.4rem}
+.rest-meta{display:flex;align-items:center;gap:.6rem;font-size:.7rem}
+.rating-badge{display:flex;align-items:center;gap:.2rem;background:#48c479;color:#fff;padding:.12rem .35rem;border-radius:4px;font-weight:700}
+.rest-tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.4rem}
+.rest-tag{font-size:.62rem;padding:.1rem .4rem;background:var(--bg);border-radius:4px;color:var(--text2)}
 
-  /* CART SECTION */
-  .section-label {
-    padding: 0.8rem 1.5rem;
-    font-size: 0.6rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--muted);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+/* ─── MENU ─── */
+.menu-sec{background:var(--white);border-radius:16px;padding:1.1rem;box-shadow:var(--card-s);margin-bottom:1rem}
+.menu-sec-title{font-size:.95rem;font-weight:700;margin-bottom:.7rem;padding-bottom:.5rem;border-bottom:1px solid var(--bg);display:flex;align-items:center;gap:.4rem}
+.menu-item{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid var(--bg);gap:.8rem}
+.menu-item:last-child{border-bottom:none;padding-bottom:0}
+.mi-left{display:flex;align-items:center;gap:.7rem;flex:1}
+.vd{width:14px;height:14px;border:1.5px solid;border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vd.veg{border-color:#22c55e}.vd.veg::after{content:'';width:6px;height:6px;border-radius:50%;background:#22c55e}
+.vd.nv{border-color:#e23744}.vd.nv::after{content:'';width:6px;height:6px;border-radius:50%;background:#e23744}
+.mi-emoji{font-size:1.7rem}
+.mi-info{flex:1}
+.mi-name{font-size:.85rem;font-weight:600;margin-bottom:.1rem}
+.mi-desc{font-size:.7rem;color:var(--text2);line-height:1.4}
+.mi-price{font-size:.875rem;font-weight:700}
+.bs-badge{display:inline-block;font-size:.6rem;background:#fff3e0;color:#e65100;border:1px solid #ffcc80;border-radius:3px;padding:.05rem .3rem;font-weight:700;margin-bottom:.15rem}
+.add-btn{padding:.38rem 1rem;border:1.5px solid var(--red);border-radius:8px;color:var(--red);font-weight:700;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit;transition:all .15s;min-width:76px}
+.add-btn:hover{background:var(--red-light)}
+.qty-ctrl{display:flex;align-items:center;border:1.5px solid var(--red);border-radius:8px;overflow:hidden}
+.q-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700;color:var(--red);background:none;border:none;cursor:pointer;font-family:inherit}
+.q-btn:hover{background:var(--red-light)}
+.q-num{font-size:.82rem;font-weight:700;color:var(--red);min-width:18px;text-align:center}
 
-  .cart-area { padding: 1.5rem; }
+/* venue back */
+.venue-hdr{display:flex;align-items:center;gap:.8rem;padding:.9rem 1.1rem;border-bottom:1px solid var(--bg);cursor:pointer}
+.v-back{color:var(--red);font-weight:700;font-size:1.1rem}
+.v-emoji{font-size:2rem}
+.v-name{font-size:.95rem;font-weight:700}
+.v-meta{font-size:.7rem;color:var(--text2)}
 
-  .cart-items { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; }
+/* ─── CART PANEL ─── */
+.cart-panel{position:sticky;top:80px}
+.c-card{background:var(--white);border-radius:16px;box-shadow:var(--card-s);overflow:hidden;margin-bottom:1rem}
+.c-hdr{padding:1rem 1.1rem .8rem;border-bottom:1px solid var(--bg)}
+.c-title{font-size:.95rem;font-weight:700}
+.c-sub{font-size:.72rem;color:var(--text2);margin-top:.1rem}
+.c-list{padding:.5rem 1.1rem;max-height:260px;overflow-y:auto}
+.ci-row{display:flex;align-items:center;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--bg);gap:.5rem;animation:sd .2s ease}
+@keyframes sd{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.ci-row:last-child{border-bottom:none}
+.ci-em{font-size:1.2rem;flex-shrink:0}
+.ci-inf{flex:1}
+.ci-nm{font-size:.78rem;font-weight:600}
+.ci-rs{font-size:.63rem;color:var(--text2)}
+.ci-pr{font-size:.78rem;font-weight:700}
+.empty-cart{padding:1.8rem 1rem;text-align:center;color:var(--text2)}
+.empty-em{font-size:2.8rem;margin-bottom:.4rem}
+.empty-txt{font-size:.78rem;line-height:1.5}
+.c-foot{padding:.9rem 1.1rem;border-top:1px solid var(--bg)}
+.bill-r{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text2);margin-bottom:.25rem}
+.bill-t{display:flex;justify-content:space-between;font-size:.9rem;font-weight:800;margin:.5rem 0;padding-top:.5rem;border-top:1px dashed var(--border)}
+.order-btn{width:100%;padding:.85rem;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s}
+.order-btn:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:0 4px 16px rgba(226,55,68,.3)}
 
-  .cart-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.8rem 1rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--orange);
-    font-size: 0.8rem;
-    animation: slideIn 0.3s ease;
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
+/* WEIRDNESS */
+.w-card{background:var(--white);border-radius:16px;box-shadow:var(--card-s);overflow:hidden;margin-bottom:1rem}
+.w-inner{padding:1rem 1.1rem}
+.w-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:.7rem}
+.w-label{font-size:.7rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.w-num{font-size:2rem;font-weight:800;line-height:1;transition:color .4s}
+.w-tier{font-size:.72rem;font-weight:700;margin-top:.1rem}
+.w-track{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:.8rem}
+.w-fill{height:100%;border-radius:4px;width:0%;transition:width .6s cubic-bezier(.4,0,.2,1),background .4s;background:var(--green)}
+.dare-box{background:linear-gradient(135deg,#fff5f5,#fff0e0);border:1.5px solid #ffcdd2;border-radius:12px;padding:.9rem;display:none;animation:pi .3s ease}
+@keyframes pi{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.dare-box.vis{display:block}
+.dare-hdr{font-size:.9rem;font-weight:800;color:var(--red);margin-bottom:.25rem}
+.dare-body{font-size:.7rem;color:var(--text2);line-height:1.5;margin-bottom:.7rem}
+.dare-cta{width:100%;padding:.6rem;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:.3rem}
+.dare-cta:hover{background:var(--red-dark)}
+.dare-skip{width:100%;padding:.4rem;background:transparent;color:var(--text2);border:none;font-family:inherit;font-size:.75rem;cursor:pointer}
 
-  .cart-item-name { font-weight: 700; }
-  .cart-item-meta { color: var(--muted); font-size: 0.65rem; margin-top: 2px; }
-  .cart-item-price { color: var(--orange); font-size: 0.85rem; }
+/* RECS */
+.r-card{background:var(--white);border-radius:16px;box-shadow:var(--card-s);padding:.9rem 1.1rem;margin-bottom:1rem}
+.r-title{font-size:.82rem;font-weight:700;margin-bottom:.7rem;display:flex;align-items:center;gap:.4rem}
+.r-scroll{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.3rem}
+.r-scroll::-webkit-scrollbar{height:0}
+.rec-p{flex-shrink:0;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:.45rem .6rem;cursor:pointer;transition:all .15s;text-align:center;min-width:78px}
+.rec-p:hover{border-color:var(--red);background:var(--red-light)}
+.rec-p.dare{border-color:var(--orange);background:#fff8f0}
+.rec-p.dare:hover{background:#ffede0}
+.rec-em{font-size:1.4rem;display:block;margin-bottom:.15rem}
+.rec-nm{font-size:.6rem;font-weight:600;line-height:1.2}
+.rec-pr{font-size:.58rem;color:var(--text2)}
+.rec-badge{font-size:.52rem;padding:.1rem .3rem;border-radius:3px;font-weight:700;display:inline-block;margin-top:.15rem}
+.rb-n{background:#e8f5e9;color:#2e7d32}
+.rb-d{background:#fff3e0;color:#e65100}
 
-  .remove-btn {
-    background: none; border: none; color: var(--muted);
-    cursor: pointer; font-size: 1rem; padding: 0 0.3rem;
-    transition: color 0.2s;
-  }
-  .remove-btn:hover { color: var(--red); }
+/* ─── LEADERBOARD ─── */
+#lb-view{display:none}
+.lb-hero{background:linear-gradient(135deg,#e23744,#c0392b);border-radius:16px;padding:1.8rem;color:#fff;margin-bottom:1.2rem;position:relative;overflow:hidden}
+.lb-hero::before{content:'🔥';position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);font-size:5rem;opacity:.2}
+.lb-hero-t{font-size:1.5rem;font-weight:800;margin-bottom:.2rem}
+.lb-hero-s{font-size:.82rem;opacity:.85;margin-bottom:.9rem}
+.lb-stats{display:flex;gap:1.5rem}
+.lb-stat-n{font-size:1.3rem;font-weight:800}
+.lb-stat-l{font-size:.7rem;opacity:.8}
+.lb-list{display:flex;flex-direction:column;gap:.7rem}
+.lb-card{background:var(--white);border-radius:16px;box-shadow:var(--card-s);padding:.9rem 1.1rem;display:flex;align-items:center;gap:.9rem;cursor:pointer;transition:all .2s;border:1.5px solid transparent}
+.lb-card:hover{box-shadow:var(--card-sh);transform:translateY(-2px);border-color:var(--border)}
+.lb-card.new-e{border-color:var(--red);animation:hl 2s ease}
+@keyframes hl{0%,100%{box-shadow:var(--card-s)}50%{box-shadow:0 0 0 4px rgba(226,55,68,.2)}}
+.lb-rank{font-size:1.6rem;font-weight:800;min-width:36px;text-align:center;line-height:1}
+.rg{color:#f59e0b}.rs{color:#94a3b8}.rb{color:#cd7f32}.ro{color:var(--border)}
+.lb-photo{width:70px;height:70px;border-radius:12px;object-fit:cover;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;overflow:hidden;border:1.5px solid var(--border)}
+.lb-photo img{width:70px;height:70px;object-fit:cover;border-radius:10px;display:block}
+.lb-inf{flex:1;min-width:0}
+.lb-cname{font-size:.88rem;font-weight:700;margin-bottom:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-citems{font-size:.68rem;color:var(--text2);margin-bottom:.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-user{font-size:.65rem;color:var(--text3)}
+.lb-badges{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.25rem}
+.lb-badge{font-size:.6rem;padding:.12rem .45rem;border-radius:20px;font-weight:700}
+.bb-leg{background:#fff3e0;color:#e65100}
+.bb-bold{background:#fefce8;color:#854d0e}
+.bb-mild{background:#f0fdf4;color:#15803d}
+.bb-ver{background:#eff6ff;color:#1d4ed8}
+.bb-new{background:#fff0f1;color:var(--red)}
+.bb-hot{background:#fdf4ff;color:#7c3aed}
+.lb-scores{text-align:right;flex-shrink:0}
+.lb-wbig{font-size:1.6rem;font-weight:800;line-height:1}
+.lb-wlab{font-size:.6rem;color:var(--text2)}
+.lb-likes{margin-top:.3rem;font-size:.72rem;color:var(--text2);display:flex;align-items:center;gap:.25rem;justify-content:flex-end}
+.like-btn{background:none;border:none;cursor:pointer;font-size:.95rem;transition:transform .15s;padding:0}
+.like-btn:hover{transform:scale(1.25)}
+.trending-up{font-size:.62rem;color:var(--green);font-weight:700}
 
-  /* ADD ITEM */
-  .add-item-row {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
+/* submit area */
+.sub-card{background:var(--white);border-radius:16px;box-shadow:var(--card-s);padding:1.1rem;margin-top:1.2rem}
+.sub-title{font-size:.95rem;font-weight:700;margin-bottom:.8rem}
+.sub-inp{width:100%;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:.85rem;outline:none;margin-bottom:.5rem;color:var(--text);transition:border-color .2s}
+.sub-inp:focus{border-color:var(--red)}
+.photo-upload{width:100%;padding:.65rem;border:1.5px dashed var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:center;margin-bottom:.5rem;transition:all .2s;position:relative;overflow:hidden}
+.photo-upload:hover{border-color:var(--red);background:var(--red-light)}
+.photo-upload input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-preview{width:100%;height:120px;border-radius:10px;object-fit:cover;margin-bottom:.5rem;display:none}
+.sub-cta{width:100%;padding:.75rem;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:.875rem;font-weight:700;cursor:pointer;transition:all .2s}
+.sub-cta:hover{background:var(--red-dark)}
 
-  .item-select {
-    flex: 1;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--white);
-    padding: 0.6rem 0.8rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    outline: none;
-    cursor: pointer;
-  }
-  .item-select:focus { border-color: var(--orange); }
+/* ─── AUTH MODAL ─── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(4px)}
+.overlay.open{display:flex}
+.modal{background:var(--white);border-radius:20px;padding:2rem;max-width:400px;width:90%;animation:pi .3s ease;position:relative}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text2);line-height:1}
+.modal-title{font-size:1.3rem;font-weight:800;margin-bottom:.2rem}
+.modal-sub{font-size:.8rem;color:var(--text2);margin-bottom:1.2rem;line-height:1.5}
+.auth-inp{width:100%;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:10px;font-family:inherit;font-size:.875rem;outline:none;margin-bottom:.6rem;color:var(--text);transition:border-color .2s}
+.auth-inp:focus{border-color:var(--red)}
+.auth-btn{width:100%;padding:.8rem;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;margin-bottom:.6rem;transition:all .2s}
+.auth-btn:hover{background:var(--red-dark)}
+.auth-switch{font-size:.8rem;color:var(--text2);text-align:center}
+.auth-switch a{color:var(--red);cursor:pointer;font-weight:600}
+.auth-divider{display:flex;align-items:center;gap:.6rem;margin:.6rem 0;font-size:.75rem;color:var(--text3)}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-  .add-btn {
-    padding: 0.6rem 1.2rem;
-    background: var(--orange);
-    color: var(--black);
-    border: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: transform 0.1s;
-  }
-  .add-btn:hover { transform: scale(1.03); }
-  .add-btn:active { transform: scale(0.97); }
+/* SUCCESS MODAL */
+.s-icon{font-size:3rem;text-align:center;margin-bottom:.5rem}
+.s-title{font-size:1.2rem;font-weight:800;text-align:center;margin-bottom:.25rem}
+.s-sub{font-size:.78rem;color:var(--text2);text-align:center;margin-bottom:1rem;line-height:1.5}
+.score-row{display:flex;gap:.7rem;margin-bottom:1rem}
+.score-tile{flex:1;background:var(--bg);border-radius:12px;padding:.75rem;text-align:center}
+.st-val{font-size:1.7rem;font-weight:800}
+.st-lbl{font-size:.6rem;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.s-close{width:100%;padding:.75rem;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer}
 
-  /* WEIRDNESS METER */
-  .weirdness-box {
-    border: 1px solid var(--border);
-    padding: 1.2rem;
-    background: var(--card);
-    margin-bottom: 1rem;
-  }
+/* LOCATION MODAL */
+.loc-list{display:flex;flex-direction:column;gap:.4rem;max-height:240px;overflow-y:auto;margin-bottom:.8rem}
+.loc-opt{padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:.85rem;font-weight:500;transition:all .2s;display:flex;align-items:center;gap:.6rem}
+.loc-opt:hover{border-color:var(--red);background:var(--red-light)}
+.loc-opt.sel{border-color:var(--red);background:var(--red-light);font-weight:700}
+.detect-loc{width:100%;padding:.65rem;border:1.5px solid var(--red);border-radius:10px;background:var(--red-light);color:var(--red);font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;margin-bottom:.6rem;transition:all .2s}
+.detect-loc:hover{background:var(--red);color:#fff}
 
-  .weirdness-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 0.8rem;
-  }
-  .weirdness-label {
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .weirdness-score {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    line-height: 1;
-    transition: color 0.5s;
-  }
-  .weirdness-tier {
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
+/* TOAST */
+.toast-wrap{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:600;pointer-events:none}
+.toast{background:#1c1c1c;color:#fff;padding:.65rem 1.4rem;border-radius:30px;font-size:.82rem;font-weight:600;opacity:0;transform:translateY(16px);transition:all .3s;white-space:nowrap;display:flex;align-items:center;gap:.5rem}
+.toast.show{opacity:1;transform:translateY(0)}
 
-  .meter-bar {
-    height: 6px;
-    background: var(--border);
-    position: relative;
-    overflow: hidden;
-  }
-  .meter-fill {
-    height: 100%;
-    width: 0%;
-    transition: width 0.8s cubic-bezier(0.4,0,0.2,1), background 0.5s;
-    background: var(--green);
-  }
+/* ─── WEIRD COMBOS SECTION ─── */
+.wc-section{background:linear-gradient(135deg,#fff5f0,#fff0f5);border:1.5px solid #ffd5cc;border-radius:16px;padding:1.1rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.wc-section::before{content:'🔥';position:absolute;right:1rem;top:50%;transform:translateY(-50%);font-size:4rem;opacity:.07;pointer-events:none}
+.wc-section-title{font-size:.95rem;font-weight:800;color:var(--red);margin-bottom:.3rem;display:flex;align-items:center;gap:.4rem}
+.wc-section-sub{font-size:.72rem;color:var(--text2);margin-bottom:.9rem;line-height:1.4}
+.wc-grid{display:flex;flex-direction:column;gap:.6rem}
+.wc-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:.8rem 1rem;display:flex;align-items:center;gap:.8rem;cursor:pointer;transition:all .2s;position:relative}
+.wc-card:hover{border-color:var(--red);box-shadow:0 2px 12px rgba(226,55,68,.1);transform:translateY(-1px)}
+.wc-emojis{font-size:1.6rem;display:flex;align-items:center;gap:.1rem;flex-shrink:0}
+.wc-plus{font-size:.9rem;color:var(--text3);margin:0 .1rem}
+.wc-info{flex:1;min-width:0}
+.wc-combo-name{font-size:.85rem;font-weight:700;margin-bottom:.15rem}
+.wc-combo-items{font-size:.7rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc-score-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:.2rem;flex-shrink:0}
+.wc-score{font-size:1.4rem;font-weight:800;line-height:1}
+.wc-score-lbl{font-size:.55rem;text-transform:uppercase;letter-spacing:.5px;font-weight:700;color:var(--text3)}
+.wc-badge{font-size:.6rem;padding:.12rem .45rem;border-radius:20px;font-weight:700}
+.wc-add-all{width:100%;margin-top:.8rem;padding:.6rem;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.wc-add-all:hover{background:var(--red-dark)}
+.wc-add-one{padding:.32rem .75rem;border:1.5px solid var(--red);border-radius:6px;color:var(--red);font-weight:700;font-size:.75rem;background:#fff;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.wc-add-one:hover{background:var(--red-light)}
+.wc-add-one.in{background:var(--red);color:#fff}
 
-  /* DARE PROMPT */
-  .dare-prompt {
-    border: 2px solid var(--orange);
-    padding: 1rem;
-    background: rgba(255,92,0,0.05);
-    display: none;
-    animation: flashIn 0.4s ease;
-  }
-  @keyframes flashIn {
-    0% { opacity: 0; transform: scale(0.97); }
-    60% { transform: scale(1.01); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-  .dare-prompt.visible { display: block; }
+/* ─── DB ADMIN PANEL ─── */
+.db-fab{position:fixed;bottom:1.5rem;right:1.5rem;width:48px;height:48px;background:var(--text);color:#fff;border:none;border-radius:50%;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:300;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.db-fab:hover{background:#333;transform:scale(1.08)}
+.db-panel{position:fixed;bottom:5rem;right:1.5rem;width:380px;background:var(--white);border:1.5px solid var(--border);border-radius:16px;box-shadow:var(--card-sh);z-index:300;display:none;overflow:hidden;animation:pi .25s ease}
+.db-panel.open{display:block}
+.db-panel-hdr{padding:.8rem 1rem;background:var(--text);color:#fff;display:flex;align-items:center;justify-content:space-between}
+.db-panel-title{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:.4rem}
+.db-panel-close{background:none;border:none;color:#fff;cursor:pointer;font-size:1rem;line-height:1}
+.db-tabs{display:flex;border-bottom:1px solid var(--border)}
+.db-tab{flex:1;padding:.5rem;font-size:.72rem;font-weight:600;background:none;border:none;cursor:pointer;font-family:inherit;color:var(--text2);border-bottom:2px solid transparent;transition:all .2s}
+.db-tab.active{color:var(--red);border-bottom-color:var(--red);background:var(--red-light)}
+.db-body{padding:.8rem}
+.db-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.8rem}
+.db-stat-box{background:var(--bg);border-radius:10px;padding:.6rem;text-align:center}
+.db-stat-n{font-size:1.3rem;font-weight:800}
+.db-stat-l{font-size:.6rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.db-json-wrap{background:#1a1a2e;border-radius:10px;padding:.8rem;max-height:200px;overflow-y:auto;margin-bottom:.7rem}
+.db-json{font-family:'Courier New',monospace;font-size:.65rem;color:#a8d8a8;white-space:pre;line-height:1.5}
+.db-actions{display:flex;gap:.5rem}
+.db-btn{flex:1;padding:.55rem;border-radius:8px;font-family:inherit;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s;border:none}
+.db-btn-dl{background:var(--green);color:#fff}
+.db-btn-dl:hover{background:#16a34a}
+.db-btn-imp{background:var(--text);color:#fff;position:relative;overflow:hidden}
+.db-btn-imp:hover{background:#333}
+.db-btn-imp input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.db-btn-reset{background:#fee2e2;color:var(--red)}
+.db-btn-reset:hover{background:#fecaca}
+.db-entry{background:var(--bg);border-radius:8px;padding:.6rem .8rem;margin-bottom:.4rem;font-size:.72rem}
+.db-entry-name{font-weight:700;margin-bottom:.15rem;display:flex;align-items:center;gap:.4rem}
+.db-entry-meta{color:var(--text2);font-size:.65rem}
+.db-entry-photo{width:32px;height:32px;border-radius:6px;object-fit:cover;flex-shrink:0}
+.db-empty{text-align:center;padding:1.5rem;color:var(--text3);font-size:.8rem}
 
-  .dare-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    color: var(--orange);
-    letter-spacing: 1px;
-    margin-bottom: 0.3rem;
-  }
-  .dare-subtitle { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.8rem; line-height: 1.5; }
+/* SIMILAR COMBO NOTIF */
+.sim-notif{position:fixed;top:80px;right:1.5rem;background:var(--white);border:1.5px solid var(--green);border-radius:14px;padding:.9rem 1.1rem;box-shadow:var(--card-sh);z-index:400;max-width:280px;animation:slideL .4s ease;display:none}
+@keyframes slideL{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.sim-notif.show{display:block}
+.sim-n-title{font-size:.8rem;font-weight:700;color:var(--green);margin-bottom:.2rem}
+.sim-n-body{font-size:.72rem;color:var(--text2);line-height:1.4}
+.sim-n-close{position:absolute;top:.5rem;right:.7rem;background:none;border:none;cursor:pointer;color:var(--text3);font-size:.9rem}
 
-  .dare-actions { display: flex; gap: 0.5rem; }
-  .dare-accept {
-    flex: 1;
-    padding: 0.6rem;
-    background: var(--orange);
-    color: var(--black);
-    border: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: transform 0.1s;
-  }
-  .dare-accept:hover { transform: scale(1.02); }
-  .dare-decline {
-    padding: 0.6rem 1rem;
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-  .dare-decline:hover { color: var(--white); }
-
-  /* RECOMMENDATIONS */
-  .recs-area { padding: 1.5rem; border-top: 1px solid var(--border); }
-
-  .recs-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-    margin-top: 0.8rem;
-  }
-
-  .rec-card {
-    border: 1px solid var(--border);
-    padding: 0.8rem 0.6rem;
-    background: var(--card);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .rec-card::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: var(--orange);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .rec-card:hover::before { opacity: 0.07; }
-  .rec-card:hover { border-color: var(--orange); transform: translateY(-2px); }
-
-  .rec-card.dare-card { border-color: var(--orange); background: rgba(255,92,0,0.06); }
-  .rec-card.dare-card .rec-badge { background: var(--orange); color: var(--black); }
-
-  .rec-emoji { font-size: 1.6rem; margin-bottom: 0.3rem; display: block; }
-  .rec-name { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px; line-height: 1.3; }
-  .rec-price { font-size: 0.6rem; color: var(--muted); margin-top: 0.2rem; }
-  .rec-badge {
-    position: absolute; top: 4px; right: 4px;
-    font-size: 0.45rem;
-    letter-spacing: 1px;
-    padding: 1px 4px;
-    background: var(--border);
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  /* CART SUMMARY */
-  .cart-summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.8rem 1.5rem;
-    border-top: 1px solid var(--border);
-    background: var(--card);
-  }
-  .cart-total { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; }
-  .cart-total span { color: var(--orange); }
-
-  .order-btn {
-    padding: 0.6rem 2rem;
-    background: var(--white);
-    color: var(--black);
-    border: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .order-btn:hover { background: var(--yellow); }
-
-  /* RIGHT PANEL - LEADERBOARD */
-  .right-panel { display: flex; flex-direction: column; }
-
-  .leaderboard-header {
-    padding: 1.2rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .lb-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-  }
-
-  .filter-row {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-  }
-  .filter-btn {
-    flex: 1;
-    padding: 0.5rem;
-    font-size: 0.55rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: transparent;
-    color: var(--muted);
-    border: none;
-    border-right: 1px solid var(--border);
-    cursor: pointer;
-    font-family: 'Space Mono', monospace;
-    transition: all 0.2s;
-  }
-  .filter-btn:last-child { border-right: none; }
-  .filter-btn.active, .filter-btn:hover { background: var(--card); color: var(--white); }
-
-  .leaderboard-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-  .leaderboard-list::-webkit-scrollbar { width: 3px; }
-  .leaderboard-list::-webkit-scrollbar-track { background: transparent; }
-  .leaderboard-list::-webkit-scrollbar-thumb { background: var(--border); }
-
-  .lb-entry {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.8rem;
-    background: var(--card);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
-    animation: slideIn 0.3s ease;
-  }
-  .lb-entry:hover { border-color: var(--orange); background: rgba(255,92,0,0.05); }
-
-  .lb-rank {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    line-height: 1;
-    min-width: 32px;
-    text-align: center;
-  }
-  .lb-rank.gold { color: var(--yellow); }
-  .lb-rank.silver { color: #aaa; }
-  .lb-rank.bronze { color: #cd7f32; }
-  .lb-rank.other { color: var(--border); }
-
-  .lb-info { flex: 1; }
-  .lb-combo-name { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.2rem; }
-  .lb-combo-items { font-size: 0.6rem; color: var(--muted); }
-
-  .lb-scores { text-align: right; }
-  .lb-weird-score {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    line-height: 1;
-  }
-  .lb-likes { font-size: 0.6rem; color: var(--muted); }
-
-  .lb-weird-badge {
-    font-size: 0.55rem;
-    letter-spacing: 1px;
-    padding: 2px 5px;
-    text-transform: uppercase;
-    font-weight: 700;
-  }
-
-  /* SUBMIT SECTION */
-  .submit-area {
-    border-top: 1px solid var(--border);
-    padding: 1rem;
-  }
-
-  .submit-title {
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.6rem;
-  }
-
-  .submit-form { display: flex; flex-direction: column; gap: 0.5rem; }
-
-  .submit-input {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--white);
-    padding: 0.5rem 0.8rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    outline: none;
-    width: 100%;
-  }
-  .submit-input:focus { border-color: var(--orange); }
-
-  .submit-btn {
-    width: 100%;
-    padding: 0.6rem;
-    background: var(--orange);
-    color: var(--black);
-    border: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: transform 0.1s;
-  }
-  .submit-btn:hover { transform: scale(1.01); }
-
-  /* MODAL */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 200;
-    backdrop-filter: blur(4px);
-  }
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--dark);
-    border: 1px solid var(--orange);
-    padding: 2rem;
-    max-width: 440px;
-    width: 90%;
-    animation: flashIn 0.3s ease;
-  }
-
-  .modal-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    color: var(--orange);
-    letter-spacing: 2px;
-    margin-bottom: 0.3rem;
-  }
-  .modal-subtitle { font-size: 0.7rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
-
-  .modal-score-display {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  .score-box {
-    flex: 1;
-    border: 1px solid var(--border);
-    padding: 1rem;
-    text-align: center;
-    background: var(--card);
-  }
-  .score-box-label { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
-  .score-box-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    line-height: 1.1;
-  }
-
-  .modal-close {
-    width: 100%;
-    padding: 0.7rem;
-    background: var(--white);
-    color: var(--black);
-    border: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    margin-top: 0.5rem;
-  }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    bottom: 1.5rem; left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--card);
-    border: 1px solid var(--orange);
-    padding: 0.8rem 1.5rem;
-    font-size: 0.75rem;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 1px;
-    transition: transform 0.3s ease;
-    z-index: 300;
-    white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  /* Scrollbar for whole page */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb { background: var(--border); }
-
-  /* Responsive */
-  @media (max-width: 900px) {
-    .app { grid-template-columns: 1fr; }
-    .right-panel { border-top: 1px solid var(--border); }
-    .recs-grid { grid-template-columns: repeat(3, 1fr); }
-  }
+@media(max-width:1000px){.wrap{grid-template-columns:1fr}.cart-panel{position:static}.rest-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.rest-grid{grid-template-columns:1fr}.hdr-inner{gap:.6rem}.loc-btn{display:none}}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">WEIRD<span>EATS</span></div>
-  <div class="nav-tabs">
-    <button class="nav-tab active">Cart</button>
-    <button class="nav-tab">Explore</button>
-    <button class="nav-tab">My Combos</button>
-  </div>
-  <div class="header-right">
-    <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-inner">
+    <a class="logo" href="#"><div class="logo-box">🍽️</div><div class="logo-txt">Weird<span>Eats</span></div></a>
+    <div class="loc-btn" onclick="openLocModal()">
+      <span>📍</span>
+      <div><div class="loc-city" id="loc-city">Connaught Place</div><div class="loc-area" id="loc-area">New Delhi, India</div></div>
+      <span style="margin-left:.5rem;color:var(--text3);font-size:.8rem">▾</span>
+    </div>
+    <div class="hdr-search"><span class="srch-ico">🔍</span><input type="text" placeholder="Search restaurants, cuisines or dishes..." id="srch" oninput="handleSearch(this.value)"></div>
+    <div class="hdr-right" id="hdr-right">
+      <button class="btn btn-outline" onclick="openAuth('login')">Sign in</button>
+      <button class="btn btn-red" onclick="openAuth('signup')">Sign up</button>
+      <button class="cart-pill" onclick="scrollToCart()">🛒 Cart <div class="cart-count" id="hdr-cnt">0</div></button>
+    </div>
   </div>
 </header>
 
-<div class="app">
-  <!-- LEFT PANEL -->
-  <div class="left-panel">
-    <div class="section-label">
-      <span>YOUR CART</span>
-      <span id="item-count">0 items</span>
+<!-- MAIN -->
+<div class="wrap" id="wrap">
+  <!-- LEFT -->
+  <div id="left">
+    <div class="page-tabs">
+      <button class="page-tab active" onclick="setTab('rest',this)">🍴 Restaurants</button>
+      <button class="page-tab" onclick="setTab('lb',this)">🏆 Combo Leaderboard</button>
     </div>
 
-    <div class="cart-area">
-      <div class="cart-items" id="cart-items">
-        <div style="color: var(--muted); font-size: 0.7rem; padding: 1rem 0; text-align: center;">Add items to get started →</div>
+    <!-- RESTAURANTS -->
+    <div id="rest-view">
+      <div class="filter-bar">
+        <button class="chip active" onclick="setFilter('all',this)">All</button>
+        <button class="chip" onclick="setFilter('north-indian',this)">🫓 North Indian</button>
+        <button class="chip" onclick="setFilter('fast-food',this)">🍔 Fast Food</button>
+        <button class="chip" onclick="setFilter('chinese',this)">🥢 Chinese</button>
+        <button class="chip" onclick="setFilter('dessert',this)">🍨 Desserts</button>
+        <button class="chip" onclick="setFilter('cafe',this)">☕ Cafes</button>
+        <button class="chip" onclick="setFilter('pizza',this)">🍕 Pizza</button>
       </div>
-
-      <div class="add-item-row">
-        <select class="item-select" id="item-select">
-          <option value="">Choose an item...</option>
-          <option value="biryani|🍛|Chicken Biryani|₹280|Main">biryani|🍛|Chicken Biryani|₹280|Main</option>
-          <option value="pizza|🍕|Pepperoni Pizza|₹320|Main">pizza|🍕|Pepperoni Pizza|₹320|Main</option>
-          <option value="gulab|🍮|Gulab Jamun|₹80|Dessert">gulab|🍮|Gulab Jamun|₹80|Dessert</option>
-          <option value="chai|🍵|Masala Chai|₹40|Beverage">chai|🍵|Masala Chai|₹40|Beverage</option>
-          <option value="burger|🍔|Zinger Burger|₹199|Main">burger|🍔|Zinger Burger|₹199|Main</option>
-          <option value="mango|🥭|Mango Lassi|₹90|Beverage">mango|🥭|Mango Lassi|₹90|Beverage</option>
-          <option value="fries|🍟|Masala Fries|₹110|Snack">fries|🍟|Masala Fries|₹110|Snack</option>
-          <option value="icecream|🍦|Vanilla Soft Serve|₹60|Dessert">icecream|🍦|Vanilla Soft Serve|₹60|Dessert</option>
-          <option value="salan|🥣|Mirchi Salan|₹70|Side">salan|🥣|Mirchi Salan|₹70|Side</option>
-          <option value="noodles|🍜|Schezwan Noodles|₹180|Main">noodles|🍜|Schezwan Noodles|₹180|Main</option>
-        </select>
-        <button class="add-btn" onclick="addItem()">+ ADD</button>
+      <div class="sec-title">Popular Restaurants near you<div class="sec-sub">Discover top spots · <span id="loc-city-inline">New Delhi</span></div></div>
+      <div class="rest-grid" id="rest-grid"></div>
+      <div id="menu-view" style="display:none">
+        <div class="menu-sec" id="menu-rest-hdr"></div>
+        <div id="menu-secs"></div>
       </div>
+    </div>
 
-      <!-- WEIRDNESS METER -->
-      <div class="weirdness-box">
-        <div class="weirdness-header">
-          <div>
-            <div class="weirdness-label">Weirdness Score</div>
-            <div class="weirdness-tier" id="weirdness-tier" style="color: var(--muted);">— Empty cart</div>
-          </div>
-          <div class="weirdness-score" id="weirdness-score" style="color: var(--muted);">0</div>
-        </div>
-        <div class="meter-bar"><div class="meter-fill" id="meter-fill"></div></div>
-      </div>
-
-      <!-- DARE PROMPT -->
-      <div class="dare-prompt" id="dare-prompt">
-        <div class="dare-title">🔥 WILD COMBO DETECTED!</div>
-        <div class="dare-subtitle" id="dare-text">This is a seriously unusual combination. Join the leaderboard — are you brave enough to try it?</div>
-        <div class="dare-actions">
-          <button class="dare-accept" onclick="acceptDare()">✓ I'M IN — ORDER IT</button>
-          <button class="dare-decline" onclick="declineDare()">Nah</button>
+    <!-- LEADERBOARD -->
+    <div id="lb-view" style="display:none">
+      <div class="lb-hero">
+        <div class="lb-hero-t">🔥 Weird Combo Leaderboard</div>
+        <div class="lb-hero-s">Real orders. Real weirdness. Community judged.</div>
+        <div class="lb-stats">
+          <div><div class="lb-stat-n" id="lb-total">0</div><div class="lb-stat-l">Combos</div></div>
+          <div><div class="lb-stat-n" id="lb-votes">0</div><div class="lb-stat-l">Votes</div></div>
+          <div><div class="lb-stat-n">₹4.2L</div><div class="lb-stat-l">Cashback</div></div>
         </div>
       </div>
-    </div>
-
-    <!-- RECOMMENDATIONS -->
-    <div class="recs-area">
-      <div class="section-label" style="padding: 0; margin-bottom: 0.8rem;">
-        <span>RECOMMENDED ADD-ONS</span>
-        <span style="color: var(--orange);">CSAO RAIL</span>
+      <div class="filter-bar">
+        <button class="chip active" onclick="setLbF('all',this)">All</button>
+        <button class="chip" onclick="setLbF('legendary',this)">🔥 Legendary</button>
+        <button class="chip" onclick="setLbF('bold',this)">⚡ Bold</button>
+        <button class="chip" onclick="setLbF('mild',this)">✅ Mild</button>
       </div>
-      <div class="recs-grid" id="recs-grid">
-        <!-- populated by JS -->
+      <div class="lb-list" id="lb-list"></div>
+      <div class="sub-card">
+        <div class="sub-title">🎯 Submit Your Combo</div>
+        <input class="sub-inp" id="combo-name" placeholder="Name your combo (e.g. 'The Monsoon Disaster')">
+        <div class="photo-upload" id="photo-upload-area">
+          <input type="file" accept="image/*" id="photo-inp" onchange="previewPhoto(this)">
+          <div id="photo-placeholder">📸 Upload your combo photo <span style="font-size:.7rem;display:block;color:var(--text3);margin-top:.2rem">Required for submission</span></div>
+        </div>
+        <img class="photo-preview" id="photo-preview" alt="preview">
+        <button class="sub-cta" onclick="submitCombo()">Submit to Leaderboard →</button>
       </div>
-    </div>
-
-    <!-- CART SUMMARY -->
-    <div class="cart-summary">
-      <div>
-        <div style="font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);">Cart Total</div>
-        <div class="cart-total">₹<span id="cart-total">0</span></div>
-      </div>
-      <button class="order-btn" onclick="placeOrder()">PLACE ORDER →</button>
     </div>
   </div>
 
-  <!-- RIGHT PANEL - LEADERBOARD -->
-  <div class="right-panel">
-    <div class="leaderboard-header">
-      <div class="lb-title">🏆 COMBO BOARD</div>
-      <div class="live-badge"><div class="live-dot"></div>142 active</div>
-    </div>
-
-    <div class="filter-row">
-      <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-      <button class="filter-btn" onclick="setFilter('legendary',this)">Legendary</button>
-      <button class="filter-btn" onclick="setFilter('bold',this)">Bold</button>
-      <button class="filter-btn" onclick="setFilter('mild',this)">Mild</button>
-    </div>
-
-    <div class="leaderboard-list" id="leaderboard-list">
-      <!-- populated by JS -->
-    </div>
-
-    <!-- SUBMIT -->
-    <div class="submit-area">
-      <div class="submit-title">Submit Your Combo</div>
-      <div class="submit-form">
-        <input class="submit-input" id="combo-name-input" placeholder="Name your combo (e.g. 'The Monsoon Disaster')">
-        <button class="submit-btn" onclick="submitCombo()">SUBMIT TO LEADERBOARD →</button>
+  <!-- RIGHT: CART -->
+  <div class="cart-panel" id="right">
+    <div class="c-card">
+      <div class="c-hdr"><div class="c-title">🛒 Your Cart</div><div class="c-sub" id="c-sub">Add items from any restaurant</div></div>
+      <div id="c-body"><div class="empty-cart"><div class="empty-em">🍽️</div><div class="empty-txt">Your cart is empty<br>Add items to get started!</div></div></div>
+      <div class="c-foot" id="c-foot" style="display:none">
+        <div class="bill-r"><span>Item Total</span><span id="b-sub">₹0</span></div>
+        <div class="bill-r"><span>Delivery Fee</span><span>₹30</span></div>
+        <div class="bill-r"><span>Platform fee</span><span>₹5</span></div>
+        <div class="bill-t"><span>TO PAY</span><span id="b-tot">₹35</span></div>
+        <button class="order-btn" onclick="placeOrder()">Place Order →</button>
       </div>
+    </div>
+    <div class="w-card" id="w-card" style="display:none">
+      <div class="w-inner">
+        <div class="w-row">
+          <div><div class="w-label">Weirdness Score</div><div class="w-tier" id="w-tier">—</div></div>
+          <div class="w-num" id="w-num">0</div>
+        </div>
+        <div class="w-track"><div class="w-fill" id="w-bar"></div></div>
+        <div class="dare-box" id="dare-box">
+          <div class="dare-hdr">🔥 Wild Combo Detected!</div>
+          <div class="dare-body" id="dare-body">This is an unusual combination. Dare to try it?</div>
+          <button class="dare-cta" onclick="acceptDare()">✓ I'm In — Order This Combo!</button>
+          <button class="dare-skip" onclick="skipDare()">Skip for now</button>
+        </div>
+      </div>
+    </div>
+    <div class="r-card" id="r-card" style="display:none">
+      <div class="r-title">✨ Recommended Add-ons <span style="font-size:.62rem;color:var(--text3);font-weight:400">CSAO Rail</span></div>
+      <div class="r-scroll" id="r-scroll"></div>
     </div>
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal">
+<!-- AUTH MODAL -->
+<div class="overlay" id="auth-overlay">
   <div class="modal">
-    <div class="modal-title" id="modal-title">COMBO SUBMITTED!</div>
-    <div class="modal-subtitle" id="modal-subtitle">Your weird combo is now live on the leaderboard. The community will judge.</div>
-    <div class="modal-score-display">
-      <div class="score-box">
-        <div class="score-box-label">Weirdness</div>
-        <div class="score-box-val" id="modal-weird" style="color: var(--orange);">0</div>
-      </div>
-      <div class="score-box">
-        <div class="score-box-label">Taste Match</div>
-        <div class="score-box-val" id="modal-taste" style="color: var(--green);">0</div>
-      </div>
-      <div class="score-box">
-        <div class="score-box-label">Combo Rank</div>
-        <div class="score-box-val" id="modal-rank" style="color: var(--yellow);">#–</div>
-      </div>
-    </div>
-    <button class="modal-close" onclick="closeModal()">CLOSE & VIEW LEADERBOARD</button>
+    <button class="modal-close" onclick="closeOverlay('auth-overlay')">✕</button>
+    <div id="auth-content"></div>
   </div>
+</div>
+
+<!-- LOCATION MODAL -->
+<div class="overlay" id="loc-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeOverlay('loc-overlay')">✕</button>
+    <div class="modal-title">📍 Set Your Location</div>
+    <div class="modal-sub">Choose your delivery area or detect automatically</div>
+    <button class="detect-loc" onclick="detectLocation()">🎯 Use My Current Location</button>
+    <div class="loc-list" id="loc-list"></div>
+    <input class="auth-inp" id="loc-custom" placeholder="Or type your area / pincode...">
+    <button class="auth-btn" onclick="setCustomLoc()">Set Location</button>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="overlay" id="success-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeOverlay('success-overlay')">✕</button>
+    <div class="s-icon">🎉</div>
+    <div class="s-title" id="s-title">Combo Submitted!</div>
+    <div class="s-sub" id="s-sub">Your weird combo is live on the leaderboard!</div>
+    <div class="score-row">
+      <div class="score-tile"><div class="st-val" id="m-w" style="color:var(--red)">0</div><div class="st-lbl">Weirdness</div></div>
+      <div class="score-tile"><div class="st-val" id="m-t" style="color:var(--green)">0</div><div class="st-lbl">Taste Score</div></div>
+      <div class="score-tile"><div class="st-val" id="m-r" style="color:var(--yellow)">#–</div><div class="st-lbl">Your Rank</div></div>
+    </div>
+    <button class="s-close" onclick="onSuccessClose()">View Leaderboard →</button>
+  </div>
+</div>
+
+<!-- SIMILAR COMBO NOTIF -->
+<div class="sim-notif" id="sim-notif">
+  <button class="sim-n-close" onclick="document.getElementById('sim-notif').classList.remove('show')">✕</button>
+  <div class="sim-n-title">📈 Combo Trending!</div>
+  <div class="sim-n-body" id="sim-n-body">Your order matches a leaderboard combo — rating boosted!</div>
+</div>
+
+<!-- DB ADMIN PANEL -->
+<button class="db-fab" onclick="toggleDbPanel()" title="View JSON Database">🗄️</button>
+<div class="db-panel" id="db-panel">
+  <div class="db-panel-hdr">
+    <div class="db-panel-title">🗄️ JSON Database <span style="font-size:.65rem;opacity:.7;font-weight:400">localStorage</span></div>
+    <button class="db-panel-close" onclick="toggleDbPanel()">✕</button>
+  </div>
+  <div class="db-tabs">
+    <button class="db-tab active" onclick="setDbTab('overview',this)">Overview</button>
+    <button class="db-tab" onclick="setDbTab('leaderboard',this)">Leaderboard</button>
+    <button class="db-tab" onclick="setDbTab('users',this)">Users</button>
+    <button class="db-tab" onclick="setDbTab('raw',this)">Raw JSON</button>
+  </div>
+  <div class="db-body" id="db-body"></div>
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast"></div>
+<div class="toast-wrap"><div class="toast" id="toast"></div></div>
 
 <script>
-  // ── DATA ──────────────────────────────────────────────────────────
-  const ALL_ITEMS = {
-    biryani:  { emoji: '🍛', name: 'Chicken Biryani', price: 280, cat: 'Main', flavor: 'spicy' },
-    pizza:    { emoji: '🍕', name: 'Pepperoni Pizza', price: 320, cat: 'Main', flavor: 'savory' },
-    gulab:    { emoji: '🍮', name: 'Gulab Jamun', price: 80, cat: 'Dessert', flavor: 'sweet' },
-    chai:     { emoji: '🍵', name: 'Masala Chai', price: 40, cat: 'Beverage', flavor: 'spiced' },
-    burger:   { emoji: '🍔', name: 'Zinger Burger', price: 199, cat: 'Main', flavor: 'savory' },
-    mango:    { emoji: '🥭', name: 'Mango Lassi', price: 90, cat: 'Beverage', flavor: 'sweet' },
-    fries:    { emoji: '🍟', name: 'Masala Fries', price: 110, cat: 'Snack', flavor: 'spicy' },
-    icecream: { emoji: '🍦', name: 'Vanilla Soft Serve', price: 60, cat: 'Dessert', flavor: 'sweet' },
-    salan:    { emoji: '🥣', name: 'Mirchi Salan', price: 70, cat: 'Side', flavor: 'spicy' },
-    noodles:  { emoji: '🍜', name: 'Schezwan Noodles', price: 180, cat: 'Main', flavor: 'spicy' },
+// ══════════════════════════════════════════════════════
+//  JSON "DATABASE" via localStorage
+// ══════════════════════════════════════════════════════
+const DB_KEY = 'weirdeats_db';
+
+function initDB() {
+  if (localStorage.getItem(DB_KEY)) return;
+  const seed = {
+    users: [],
+    leaderboard: [
+      { id:'lb1', name:'The Maharaja Mango Disaster', items:['Maharaja Mac','Sitaphal Ice Cream','Mutton Dum Biryani'], itemIds:['mc-b2','ni-s3','bb-b2'], weird:90, taste:12, likes:3241, user:'@chaos_eater', verified:true, photo:null, ts: Date.now()-86400000*5 },
+      { id:'lb2', name:'Lal Maas Mango Sundae', items:['Lal Maas','Alphonso Mango Ice Cream','Manchow Soup'], itemIds:['pg-m2','ni-s1','wc-sp2'], weird:88, taste:15, likes:2897, user:'@spicy_nerd', verified:true, photo:null, ts: Date.now()-86400000*4 },
+      { id:'lb3', name:'The Bangalore Brunch Bomb', items:['Blueberry Muffin','Mutton Biryani','Masala Chaas'], itemIds:['sb-f1','bb-b2','pg-bv2'], weird:85, taste:28, likes:2542, user:'@foodlunatic', photo:null, ts: Date.now()-86400000*3 },
+      { id:'lb4', name:'Biryani McFlurry Fusion', items:['Hyderabadi Biryani','McFlurry Oreo','Mirchi Ka Salan'], itemIds:['bb-b1','mc-s2','bb-a1'], weird:83, taste:22, likes:2108, user:'@delhidares', verified:true, photo:null, ts: Date.now()-86400000*2 },
+      { id:'lb5', name:'Schezwan Lava Surprise', items:['Schezwan Noodles','Choco Lava Cake','Cold Brew'], itemIds:['wc-n1','dom-d1','sb-c2'], weird:75, taste:35, likes:1543, user:'@noodleman', photo:null, ts: Date.now()-86400000 },
+      { id:'lb6', name:'Kulcha Frappuccino Combo', items:['Amritsari Kulcha','Frappuccino','Lassi'], itemIds:['pg-br1','sb-c1','pg-bv1'], weird:65, taste:50, likes:1320, user:'@punjab_pride', photo:null, ts: Date.now()-3600000*12 },
+      { id:'lb7', name:'Kebab Ice Cream Rush', items:['Chicken Seekh Kebab','Alphonso Mango Ice Cream'], itemIds:['bbn-s1','ni-s1'], weird:70, taste:44, likes:1760, user:'@foodbrave', photo:null, ts: Date.now()-3600000*8 },
+      { id:'lb8', name:'The Civilised Ending', items:['Margherita Pizza','Brownie Sundae'], itemIds:['dom-p1','ni-sp1'], weird:38, taste:72, likes:980, user:'@normie_eater', photo:null, ts: Date.now()-3600000*4 }
+    ],
+    currentUser: null
   };
+  saveDB(seed);
+}
 
-  const WEIRD_PAIRS = {
-    'biryani+icecream': 88, 'biryani+gulab': 45, 'pizza+chai': 72,
-    'pizza+mango': 65, 'burger+gulab': 58, 'noodles+gulab': 80,
-    'biryani+pizza': 90, 'burger+icecream': 40, 'pizza+icecream': 55,
-    'noodles+chai': 35, 'biryani+mango': 30, 'fries+icecream': 38,
-  };
+function getDB() { return JSON.parse(localStorage.getItem(DB_KEY)); }
+function saveDB(data) {
+  localStorage.setItem(DB_KEY, JSON.stringify(data));
+  // Auto-refresh panel if open
+  const p = document.getElementById('db-panel');
+  if (p && p.classList.contains('open')) renderDbPanel();
+}
 
-  // COMPLEMENTARY RECS by cart content
-  const COMPLEMENT_RECS = {
-    biryani: ['salan','gulab','mango','chai'],
-    pizza:   ['fries','mango','icecream','chai'],
-    burger:  ['fries','mango','icecream','chai'],
-    noodles: ['fries','mango','chai','icecream'],
-    default: ['chai','fries','icecream','gulab'],
-  };
-
-  let cart = [];
-  let currentFilter = 'all';
-
-  const LEADERBOARD_DATA = [
-    { name: 'The Biryani Ice Cream Disaster', items: ['Biryani', 'Soft Serve', 'Mirchi Salan'], weird: 94, taste: 12, likes: 2341, user: '@spicy_nerd' },
-    { name: 'Chai & Pepperoni Sunset', items: ['Pepperoni Pizza', 'Masala Chai', 'Gulab Jamun'], weird: 78, taste: 45, likes: 1899, user: '@foodchaos' },
-    { name: 'Schezwan Gulab Experiment', items: ['Schezwan Noodles', 'Gulab Jamun'], weird: 81, taste: 22, likes: 1654, user: '@noodlemaster' },
-    { name: 'Mango Pizza Sunday', items: ['Pepperoni Pizza', 'Mango Lassi', 'Masala Fries'], weird: 67, taste: 55, likes: 1432, user: '@mangolover' },
-    { name: 'The Burger Dessert Stack', items: ['Zinger Burger', 'Gulab Jamun', 'Masala Chai'], weird: 58, taste: 61, likes: 1200, user: '@burgerqueen' },
-    { name: 'Biryani Pizza Fusion', items: ['Chicken Biryani', 'Pepperoni Pizza'], weird: 91, taste: 18, likes: 1100, user: '@fusion_king' },
-    { name: 'Chai & Ice Cream Float', items: ['Masala Chai', 'Vanilla Soft Serve'], weird: 44, taste: 72, likes: 987, user: '@desi_dessert' },
-    { name: 'Fries & Lassi Duo', items: ['Masala Fries', 'Mango Lassi'], weird: 32, taste: 80, likes: 820, user: '@classic_twist' },
-  ];
-
-  // ── CART LOGIC ────────────────────────────────────────────────────
-  function addItem() {
-    const sel = document.getElementById('item-select');
-    const val = sel.value;
-    if (!val) return;
-
-    const [key] = val.split('|');
-    const item = ALL_ITEMS[key];
-    if (!item) return;
-    if (cart.find(c => c.key === key)) { showToast('Already in cart!'); return; }
-
-    cart.push({ key, ...item });
-    sel.value = '';
-    renderCart();
-    updateWeirdness();
-    updateRecs();
-  }
-
-  function removeItem(key) {
-    cart = cart.filter(c => c.key !== key);
-    renderCart();
-    updateWeirdness();
-    updateRecs();
-  }
-
-  function renderCart() {
-    const el = document.getElementById('cart-items');
-    const countEl = document.getElementById('item-count');
-    const totalEl = document.getElementById('cart-total');
-
-    if (cart.length === 0) {
-      el.innerHTML = '<div style="color: var(--muted); font-size: 0.7rem; padding: 1rem 0; text-align: center;">Add items to get started →</div>';
-      countEl.textContent = '0 items';
-      totalEl.textContent = '0';
-      return;
+// ══════════════════════════════════════════════════════
+//  RESTAURANT & MENU DATA
+// ══════════════════════════════════════════════════════
+const RESTAURANTS = [
+  { id:'bbn', name:'Barbeque Nation', cuisine:'North Indian, Barbeque, Mughlai', emoji:'🔥', bg:'#fff5ee', rating:4.4, time:'35–45 min', price:'₹800 for two', tags:['north-indian'], badges:['Bestseller'],
+    menu:{
+      'Starters':[
+        {id:'bbn-s1',name:'Chicken Seekh Kebab',emoji:'🍢',price:320,veg:false,desc:'Juicy minced chicken kebabs on live coal',bs:true},
+        {id:'bbn-s2',name:'Paneer Tikka',emoji:'🧀',price:250,veg:true,desc:'Marinated cottage cheese cubes grilled to perfection'},
+        {id:'bbn-s3',name:'Prawn Skewer',emoji:'🦐',price:380,veg:false,desc:'Tiger prawns in coastal spices'},
+      ],
+      'Main Course':[
+        {id:'bbn-m1',name:'Mutton Biryani',emoji:'🍛',price:450,veg:false,desc:'Slow-cooked aromatic biryani with tender mutton',bs:true},
+        {id:'bbn-m2',name:'Dal Makhani',emoji:'🫘',price:280,veg:true,desc:'Creamy black lentils cooked overnight'},
+        {id:'bbn-m3',name:'Butter Chicken',emoji:'🍗',price:390,veg:false,desc:'Classic tomato-based curry with tender chicken'},
+      ],
+      'Desserts':[
+        {id:'bbn-d1',name:'Gulab Jamun',emoji:'🍮',price:120,veg:true,desc:'Soft milk solids in rose syrup',bs:true},
+        {id:'bbn-d2',name:'Phirni',emoji:'🍚',price:150,veg:true,desc:'Creamy rice pudding with saffron'},
+      ]
     }
+  },
+  { id:'mc', name:"McDonald's", cuisine:'Burgers, Fast Food, American', emoji:'🍔', bg:'#fffbee', rating:4.2, time:'20–30 min', price:'₹400 for two', tags:['fast-food'], badges:['Fast Delivery'],
+    menu:{
+      'Burgers':[
+        {id:'mc-b1',name:'McAloo Tikki',emoji:'🥔',price:99,veg:true,desc:'Crispy aloo tikki patty with tangy sauces',bs:true},
+        {id:'mc-b2',name:'Maharaja Mac',emoji:'🍔',price:249,veg:false,desc:'Iconic chicken patty with special Mac sauce'},
+        {id:'mc-b3',name:'McVeggie',emoji:'🌿',price:149,veg:true,desc:'Wholesome veggie patty burger'},
+      ],
+      'Sides & Drinks':[
+        {id:'mc-s1',name:'Large Fries',emoji:'🍟',price:129,veg:true,desc:"McDonald's classic golden fries",bs:true},
+        {id:'mc-s2',name:'McFlurry Oreo',emoji:'🍦',price:139,veg:true,desc:'Soft serve with Oreo cookie pieces'},
+        {id:'mc-s3',name:'Strawberry Shake',emoji:'🥤',price:129,veg:true,desc:'Thick creamy strawberry milkshake'},
+      ],
+      'Meals':[
+        {id:'mc-m1',name:'McSpicy Chicken Meal',emoji:'🌶️',price:349,veg:false,desc:'Spicy chicken burger + fries + Coke',bs:true},
+      ]
+    }
+  },
+  { id:'pg', name:'Punjab Grill', cuisine:'North Indian, Mughlai, Punjabi', emoji:'🫓', bg:'#f0faf0', rating:4.5, time:'40–55 min', price:'₹1200 for two', tags:['north-indian'], badges:['Top Rated'],
+    menu:{
+      'Breads':[
+        {id:'pg-br1',name:'Amritsari Kulcha',emoji:'🥙',price:180,veg:true,desc:'Stuffed bread from the streets of Amritsar',bs:true},
+        {id:'pg-br2',name:'Tandoori Roti',emoji:'🫓',price:60,veg:true,desc:'Whole wheat bread from clay oven'},
+        {id:'pg-br3',name:'Stuffed Paratha',emoji:'🥞',price:160,veg:true,desc:'Flatbread stuffed with spiced potatoes'},
+      ],
+      'Mains':[
+        {id:'pg-m1',name:'Sarson da Saag',emoji:'🥬',price:280,veg:true,desc:'Slow-cooked mustard greens',bs:true},
+        {id:'pg-m2',name:'Lal Maas',emoji:'🍖',price:420,veg:false,desc:'Rajasthani mutton in fiery red chili'},
+        {id:'pg-m3',name:'Chicken Karahi',emoji:'🍗',price:380,veg:false,desc:'Wok-tossed chicken in tomato-ginger base'},
+      ],
+      'Beverages':[
+        {id:'pg-bv1',name:'Lassi',emoji:'🥛',price:120,veg:true,desc:'Chilled sweet or salted yogurt drink',bs:true},
+        {id:'pg-bv2',name:'Masala Chaas',emoji:'🧉',price:80,veg:true,desc:'Spiced buttermilk with cumin'},
+      ]
+    }
+  },
+  { id:'wc', name:'Wow! China', cuisine:'Chinese, Pan-Asian, Noodles', emoji:'🥢', bg:'#f0f8ff', rating:4.1, time:'25–35 min', price:'₹500 for two', tags:['chinese'], badges:['Popular'],
+    menu:{
+      'Noodles & Rice':[
+        {id:'wc-n1',name:'Schezwan Noodles',emoji:'🍜',price:189,veg:false,desc:'Wok-tossed in fiery Schezwan sauce',bs:true},
+        {id:'wc-n2',name:'Hakka Noodles',emoji:'🍝',price:169,veg:true,desc:'Chinese-style stir-fried noodles'},
+        {id:'wc-n3',name:'Fried Rice',emoji:'🍚',price:179,veg:false,desc:'Wok-tossed rice with eggs and veggies'},
+      ],
+      'Starters':[
+        {id:'wc-s1',name:'Chicken Momos',emoji:'🥟',price:149,veg:false,desc:'Steamed dumplings with juicy chicken filling',bs:true},
+        {id:'wc-s2',name:'Veg Spring Roll',emoji:'🌯',price:129,veg:true,desc:'Crispy rolls stuffed with mixed veggies'},
+        {id:'wc-s3',name:'Chilli Chicken',emoji:'🌶️',price:229,veg:false,desc:'Crispy chicken in Indo-Chinese spices'},
+      ],
+      'Soups':[
+        {id:'wc-sp1',name:'Hot & Sour Soup',emoji:'🍲',price:129,veg:true,desc:'Classic tangy soup with vegetables',bs:true},
+        {id:'wc-sp2',name:'Manchow Soup',emoji:'🥣',price:139,veg:false,desc:'Rich chicken soup with crispy noodles'},
+      ]
+    }
+  },
+  { id:'ni', name:"Natural's Ice Cream", cuisine:'Ice Cream, Desserts, Sweets', emoji:'🍦', bg:'#fff0f5', rating:4.7, time:'20–30 min', price:'₹300 for two', tags:['dessert'], badges:['#1 Desserts'],
+    menu:{
+      'Signature Scoops':[
+        {id:'ni-s1',name:'Alphonso Mango',emoji:'🥭',price:120,veg:true,desc:'Pure Alphonso mangoes, no preservatives',bs:true},
+        {id:'ni-s2',name:'Tender Coconut',emoji:'🥥',price:130,veg:true,desc:'Fresh tender coconut with real pieces'},
+        {id:'ni-s3',name:'Sitaphal',emoji:'🍈',price:140,veg:true,desc:'Custard apple ice cream — a cult classic',bs:true},
+      ],
+      'Sundaes':[
+        {id:'ni-sp1',name:'Brownie Sundae',emoji:'🍫',price:220,veg:true,desc:'Warm brownie with 2 scoops of vanilla'},
+        {id:'ni-sp2',name:'Fruit Bowl',emoji:'🍓',price:180,veg:true,desc:'Seasonal fruits with two flavour scoops'},
+      ],
+      'Milkshakes':[
+        {id:'ni-mk1',name:'Mango Shake',emoji:'🥤',price:160,veg:true,desc:'Thick mango milkshake',bs:true},
+        {id:'ni-mk2',name:'Strawberry Shake',emoji:'🍓',price:150,veg:true,desc:'Creamy fresh strawberry milkshake'},
+      ]
+    }
+  },
+  { id:'sb', name:'Starbucks', cuisine:'Cafe, Coffee, Beverages', emoji:'☕', bg:'#f0fff8', rating:4.3, time:'15–25 min', price:'₹600 for two', tags:['cafe'], badges:['Trending'],
+    menu:{
+      'Hot Beverages':[
+        {id:'sb-h1',name:'Café Latte',emoji:'☕',price:310,veg:true,desc:'Smooth espresso with steamed milk',bs:true},
+        {id:'sb-h2',name:'Cappuccino',emoji:'🫧',price:290,veg:true,desc:'Classic Italian espresso with frothed milk'},
+        {id:'sb-h3',name:'Caramel Macchiato',emoji:'🍮',price:370,veg:true,desc:'Espresso with vanilla syrup & caramel',bs:true},
+      ],
+      'Cold Beverages':[
+        {id:'sb-c1',name:'Frappuccino',emoji:'🥤',price:390,veg:true,desc:'Blended iced coffee with whipped cream',bs:true},
+        {id:'sb-c2',name:'Cold Brew',emoji:'🧋',price:360,veg:true,desc:'Slow-steeped cold brew over ice'},
+        {id:'sb-c3',name:'Mango Passion Iced Tea',emoji:'🍵',price:290,veg:true,desc:'Tropical iced tea'},
+      ],
+      'Food':[
+        {id:'sb-f1',name:'Blueberry Muffin',emoji:'🫐',price:280,veg:true,desc:'Moist blueberry muffin baked fresh',bs:true},
+        {id:'sb-f2',name:'Chicken Sandwich',emoji:'🥪',price:320,veg:false,desc:'Grilled chicken with mayo and greens'},
+        {id:'sb-f3',name:'Chocolate Cake Pop',emoji:'🍡',price:180,veg:true,desc:'Moist chocolate cake on a stick'},
+      ]
+    }
+  },
+  { id:'dom', name:"Domino's Pizza", cuisine:'Pizza, Fast Food, Italian', emoji:'🍕', bg:'#fff5f5', rating:4.2, time:'25–35 min', price:'₹500 for two', tags:['pizza','fast-food'], badges:['30 min delivery'],
+    menu:{
+      'Pizzas':[
+        {id:'dom-p1',name:'Margherita',emoji:'🍕',price:199,veg:true,desc:'Classic tomato sauce with mozzarella',bs:true},
+        {id:'dom-p2',name:'Peppy Paneer',emoji:'🧀',price:299,veg:true,desc:'Chunky paneer with bell peppers'},
+        {id:'dom-p3',name:'Chicken Dominator',emoji:'🍗',price:399,veg:false,desc:'Loaded with multiple chicken toppings',bs:true},
+      ],
+      'Sides':[
+        {id:'dom-s1',name:'Garlic Breadsticks',emoji:'🥖',price:149,veg:true,desc:'Oven-baked breadsticks with garlic butter',bs:true},
+        {id:'dom-s2',name:'Cheese Dip',emoji:'🫙',price:59,veg:true,desc:'Creamy melted cheese dipping sauce'},
+        {id:'dom-s3',name:'Pasta Italiana',emoji:'🍝',price:199,veg:true,desc:'Creamy white sauce pasta with veggies'},
+      ],
+      'Desserts':[
+        {id:'dom-d1',name:'Choco Lava Cake',emoji:'🍫',price:109,veg:true,desc:'Warm chocolate cake with molten center',bs:true},
+        {id:'dom-d2',name:'Mousse Cake',emoji:'🎂',price:129,veg:true,desc:'Light creamy chocolate mousse cake'},
+      ]
+    }
+  },
+  { id:'bb', name:'Biryani Blues', cuisine:'Biryani, Hyderabadi, Kebabs', emoji:'🍛', bg:'#fffaf0', rating:4.6, time:'30–45 min', price:'₹600 for two', tags:['north-indian'], badges:['Biryani Specialist'],
+    menu:{
+      'Biryani':[
+        {id:'bb-b1',name:'Hyderabadi Chicken Biryani',emoji:'🍛',price:320,veg:false,desc:'Dum-cooked biryani with saffron rice',bs:true},
+        {id:'bb-b2',name:'Mutton Dum Biryani',emoji:'🍖',price:380,veg:false,desc:'Fragrant biryani with succulent mutton'},
+        {id:'bb-b3',name:'Veg Biryani',emoji:'🌾',price:250,veg:true,desc:'Aromatic basmati rice with vegetables'},
+      ],
+      'Accompaniments':[
+        {id:'bb-a1',name:'Mirchi Ka Salan',emoji:'🥣',price:80,veg:true,desc:'Traditional green chili curry for biryani',bs:true},
+        {id:'bb-a2',name:'Raita',emoji:'🫙',price:60,veg:true,desc:'Cooling yogurt with cucumber and boondi'},
+        {id:'bb-a3',name:'Double ka Meetha',emoji:'🍞',price:120,veg:true,desc:'Hyderabadi bread pudding with dry fruits'},
+      ]
+    }
+  }
+];
 
-    let total = 0;
-    el.innerHTML = cart.map(item => {
-      total += item.price;
-      return `<div class="cart-item">
-        <div>
-          <div class="cart-item-name">${item.emoji} ${item.name}</div>
-          <div class="cart-item-meta">${item.cat}</div>
+const WEIRD_PAIRS = {
+  'mc-b2+ni-s3':90,'ni-s1+pg-m2':88,'sb-f1+bb-b2':85,'bb-b1+mc-s2':83,
+  'bbn-s1+ni-s1':70,'wc-n1+dom-d1':75,'pg-br1+sb-c1':65,'dom-p3+sb-h2':72,
+  'mc-s2+ni-s1':82,'bbn-m1+dom-d1':78,'wc-s3+ni-s2':68,'sb-f1+bbn-m1':85,
+  'bb-b2+mc-s2':83,'dom-p1+ni-sp1':38,'wc-sp2+ni-sp1':71,'bbn-d1+mc-s1':60,
+};
+
+// Per-restaurant weird combo suggestions (items from within that restaurant + cross-restaurant)
+const RESTAURANT_WEIRD_COMBOS = {
+  bbn: [
+    { name:'The Kebab Ice Cream Clash', items:['bbn-s1','ni-s1'], score:70, desc:'Smoky seekh kebab chased with cold mango ice cream — only 2% dare this' },
+    { name:'Biryani Lava Meltdown', items:['bbn-m1','dom-d1'], score:78, desc:'Mutton biryani followed by choco lava cake — a chaotic but oddly satisfying end' },
+    { name:'Tikka Frappuccino Nightmare', items:['bbn-s2','sb-c1'], score:62, desc:'Paneer tikka + iced frappuccino — the Indo-Italian identity crisis' },
+    { name:'The Full Confusion', items:['bbn-s1','bbn-d1','mc-s2'], score:83, desc:'Seekh kebab → gulab jamun → McFlurry. A journey no one asked for.' },
+  ],
+  mc: [
+    { name:'McFlurry Maharaja Stack', items:['mc-b2','mc-s2'], score:58, desc:'Spicy Maharaja Mac immediately followed by a sweet McFlurry — sweet heat chaos' },
+    { name:'The Desi Monsoon Meal', items:['mc-b1','pg-bv1'], score:55, desc:'McAloo Tikki washed down with a tall Punjabi Lassi — surprisingly divisive' },
+    { name:'Burger Biryani Mashup', items:['mc-b2','bb-b1'], score:83, desc:'Maharaja Mac + Hyderabadi biryani in one sitting — maximum carb chaos' },
+    { name:'The McIcecream Mango Swirl', items:['mc-s2','ni-s1'], score:82, desc:'McFlurry Oreo + Alphonso mango scoop — dessert Russian roulette' },
+  ],
+  pg: [
+    { name:'Kulcha Cappuccino Confusion', items:['pg-br1','sb-h2'], score:65, desc:'Stuffed kulcha with a hot cappuccino — Amritsar meets Milan in the worst way' },
+    { name:'Lal Maas Mango Sundae', items:['pg-m2','ni-s1'], score:88, desc:'Fiery Rajasthani mutton immediately followed by sweet mango ice cream' },
+    { name:'Saag McFlurry Sunday', items:['pg-m1','mc-s2'], score:71, desc:'Sarson da saag cleaned up with a cold Oreo McFlurry — Punjab gone rogue' },
+    { name:'The Lassi Lava Duo', items:['pg-bv1','dom-d1'], score:60, desc:'Sweet lassi with choco lava cake — dessert overload, no regrets' },
+  ],
+  wc: [
+    { name:'Schezwan Lava Surprise', items:['wc-n1','dom-d1'], score:75, desc:'Fiery schezwan noodles followed by molten choco lava — fire meets fire' },
+    { name:'Manchow Brownie Sundae', items:['wc-sp2','ni-sp1'], score:71, desc:'Rich chicken soup → warm brownie sundae. Soup as a dessert starter?' },
+    { name:'Chilli Chicken Coconut Mash', items:['wc-s3','ni-s2'], score:68, desc:'Spicy Indo-Chinese chilli chicken with creamy tender coconut ice cream' },
+    { name:'The Confused Asian', items:['wc-s1','sb-c2'], score:63, desc:'Juicy chicken momos dunked alongside a cold brew — East meets West awkwardly' },
+  ],
+  ni: [
+    { name:'Sitaphal Maharaja Duo', items:['ni-s3','mc-b2'], score:90, desc:'Custard apple ice cream + Maharaja Mac — the single weirdest pairing on this app' },
+    { name:'Mango Biryani Chaser', items:['ni-s1','bb-b1'], score:83, desc:'Cool alphonso mango scoop with hyderabadi biryani — dessert before or after?' },
+    { name:'Brownie Blueberry Overload', items:['ni-sp1','sb-f1'], score:52, desc:'Warm brownie sundae + blueberry muffin — a dessert-on-dessert crime' },
+    { name:'Coconut Kebab Surprise', items:['ni-s2','bbn-s1'], score:70, desc:'Tender coconut ice cream with smoky seekh kebab — cold shock therapy' },
+  ],
+  sb: [
+    { name:'Muffin Mutton Madness', items:['sb-f1','bb-b2'], score:85, desc:'Blueberry muffin with mutton dum biryani — the brunch that broke the internet' },
+    { name:'Frappuccino Kulcha Fusion', items:['sb-c1','pg-br1'], score:65, desc:'Icy frappuccino paired with a buttery Amritsari kulcha — confused and delicious?' },
+    { name:'Cappuccino Dominator Pair', items:['sb-h2','dom-p3'], score:72, desc:'Sipping a cappuccino while eating Chicken Dominator pizza — Italian identity theft' },
+    { name:'Cold Brew Lal Maas', items:['sb-c2','pg-m2'], score:80, desc:'Slow-steeped cold brew to cool down fiery Lal Maas — brave or brilliant?' },
+  ],
+  dom: [
+    { name:'Pizza Chai Special', items:['dom-p3','pg-bv1'], score:68, desc:'Chicken Dominator pizza with a glass of sweet lassi — the desi pizza experience' },
+    { name:'Lava Cake Biryani Closer', items:['dom-d1','bb-b1'], score:78, desc:'End your biryani with a molten lava cake — controversy in a ramekin' },
+    { name:'Breadstick Ice Cream Dip', items:['dom-s1','ni-s1'], score:64, desc:'Dipping garlic breadsticks into mango ice cream — nobody asked, everybody judged' },
+    { name:'The Margherita McFlurry Meal', items:['dom-p1','mc-s2'], score:55, desc:'Classic margherita followed by Oreo McFlurry — oddly acceptable chaos' },
+  ],
+  bb: [
+    { name:'Biryani McFlurry Fusion', items:['bb-b1','mc-s2'], score:83, desc:'Hyderabadi biryani immediately chased with Oreo McFlurry — the leaderboard legend' },
+    { name:'Mutton Mango Madness', items:['bb-b2','ni-s1'], score:80, desc:'Rich mutton dum biryani with alphonso mango ice cream — sweet heat overload' },
+    { name:'Meetha Frappuccino Finisher', items:['bb-a3','sb-c1'], score:61, desc:'Double ka meetha paired with a cold frappuccino — double the sweetness, double the regret' },
+    { name:'The Full Hyderabadi Chaos', items:['bb-b1','bb-a1','mc-s2'], score:86, desc:'Biryani + mirchi salan + McFlurry. This is not a meal. This is a statement.' },
+  ],
+};
+
+const COMP_MAP = {
+  biryani:['bb-a1','bb-a2','ni-s1','pg-bv1'],
+  burger:['mc-s1','mc-s2','sb-c2','dom-s2'],
+  pizza:['dom-s1','sb-c1','dom-s2','ni-s2'],
+  dessert:['sb-h1','pg-bv2','wc-sp1'],
+  default:['mc-s1','sb-h1','ni-s1','dom-s1'],
+};
+
+const LOCATIONS = [
+  {name:'Connaught Place', area:'New Delhi', lat:28.6289, lng:77.2065},
+  {name:'Koramangala', area:'Bengaluru', lat:12.9352, lng:77.6245},
+  {name:'Bandra West', area:'Mumbai', lat:19.0596, lng:72.8295},
+  {name:'Jubilee Hills', area:'Hyderabad', lat:17.4326, lng:78.4071},
+  {name:'Anna Nagar', area:'Chennai', lat:13.0850, lng:80.2101},
+  {name:'Salt Lake', area:'Kolkata', lat:22.5726, lng:88.4324},
+  {name:'Karol Bagh', area:'New Delhi', lat:28.6519, lng:77.1909},
+  {name:'Indiranagar', area:'Bengaluru', lat:12.9784, lng:77.6408},
+];
+
+// ── STATE ──
+let cart = [];
+let activeFilter = 'all';
+let lbFilter = 'all';
+let currentRest = null;
+let allItems = {};
+let photoDataURL = null;
+
+// Build item lookup
+RESTAURANTS.forEach(r => Object.values(r.menu).forEach(sec => sec.forEach(it => {
+  allItems[it.id] = { ...it, restId: r.id, restName: r.name };
+})));
+
+// ── INIT ──
+initDB();
+renderRestaurants();
+updateAuthUI();
+
+// ══════════════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════════════
+function updateAuthUI() {
+  const db = getDB();
+  const u = db.currentUser;
+  const hr = document.getElementById('hdr-right');
+  if (u) {
+    hr.innerHTML = `
+      <div class="user-pill" onclick="openUserMenu()">
+        <div class="user-avatar">${u.name[0].toUpperCase()}</div>
+        <span>${u.name.split(' ')[0]}</span>▾
+      </div>
+      <button class="cart-pill" onclick="scrollToCart()">🛒 Cart <div class="cart-count" id="hdr-cnt">${cart.reduce((s,c)=>s+c.qty,0)}</div></button>
+    `;
+  } else {
+    hr.innerHTML = `
+      <button class="btn btn-outline" onclick="openAuth('login')">Sign in</button>
+      <button class="btn btn-red" onclick="openAuth('signup')">Sign up</button>
+      <button class="cart-pill" onclick="scrollToCart()">🛒 Cart <div class="cart-count" id="hdr-cnt">${cart.reduce((s,c)=>s+c.qty,0)}</div></button>
+    `;
+  }
+}
+
+function openAuth(mode) {
+  const c = document.getElementById('auth-content');
+  if (mode === 'login') {
+    c.innerHTML = `
+      <div class="modal-title">Welcome back! 👋</div>
+      <div class="modal-sub">Sign in to submit combos, earn cashback and access your order history</div>
+      <input class="auth-inp" id="a-email" type="email" placeholder="Email address">
+      <input class="auth-inp" id="a-pass" type="password" placeholder="Password">
+      <button class="auth-btn" onclick="doLogin()">Sign In</button>
+      <div class="auth-divider">or</div>
+      <div class="auth-switch">Don't have an account? <a onclick="openAuth('signup')">Sign up free</a></div>
+    `;
+  } else {
+    c.innerHTML = `
+      <div class="modal-title">Join WeirdEats 🔥</div>
+      <div class="modal-sub">Create an account to submit combos, earn cashback and climb the leaderboard</div>
+      <input class="auth-inp" id="a-name" placeholder="Full name">
+      <input class="auth-inp" id="a-email" type="email" placeholder="Email address">
+      <input class="auth-inp" id="a-pass" type="password" placeholder="Create password (min 6 chars)">
+      <button class="auth-btn" onclick="doSignup()">Create Account</button>
+      <div class="auth-divider">or</div>
+      <div class="auth-switch">Already have an account? <a onclick="openAuth('login')">Sign in</a></div>
+    `;
+  }
+  openOverlay('auth-overlay');
+}
+
+function doSignup() {
+  const name = document.getElementById('a-name')?.value.trim();
+  const email = document.getElementById('a-email').value.trim();
+  const pass = document.getElementById('a-pass').value;
+  if (!name) { showToast('⚠️ Enter your name'); return; }
+  if (!email.includes('@')) { showToast('⚠️ Enter valid email'); return; }
+  if (pass.length < 6) { showToast('⚠️ Password min 6 chars'); return; }
+  const db = getDB();
+  if (db.users.find(u => u.email === email)) { showToast('⚠️ Email already registered'); return; }
+  const user = { id: 'u' + Date.now(), name, email, pass, joinedAt: Date.now() };
+  db.users.push(user);
+  db.currentUser = user;
+  saveDB(db);
+  closeOverlay('auth-overlay');
+  updateAuthUI();
+  showToast(`🎉 Welcome, ${name}!`);
+}
+
+function doLogin() {
+  const email = document.getElementById('a-email').value.trim();
+  const pass = document.getElementById('a-pass').value;
+  const db = getDB();
+  const user = db.users.find(u => u.email === email && u.pass === pass);
+  if (!user) { showToast('⚠️ Invalid email or password'); return; }
+  db.currentUser = user;
+  saveDB(db);
+  closeOverlay('auth-overlay');
+  updateAuthUI();
+  showToast(`👋 Welcome back, ${user.name.split(' ')[0]}!`);
+}
+
+function openUserMenu() {
+  const db = getDB();
+  const u = db.currentUser;
+  const c = document.getElementById('auth-content');
+  c.innerHTML = `
+    <div class="modal-title">Hi, ${u.name.split(' ')[0]}! 👤</div>
+    <div class="modal-sub">${u.email}<br><span style="font-size:.7rem;color:var(--text3)">Member since ${new Date(u.joinedAt).toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</span></div>
+    <button class="auth-btn" onclick="doLogout()">Sign Out</button>
+  `;
+  openOverlay('auth-overlay');
+}
+
+function doLogout() {
+  const db = getDB();
+  db.currentUser = null;
+  saveDB(db);
+  closeOverlay('auth-overlay');
+  updateAuthUI();
+  showToast('👋 Signed out successfully');
+}
+
+// ══════════════════════════════════════════════════════
+//  LOCATION
+// ══════════════════════════════════════════════════════
+function openLocModal() {
+  const list = document.getElementById('loc-list');
+  list.innerHTML = LOCATIONS.map(l => `
+    <div class="loc-opt" onclick="setLocation('${l.name}','${l.area}')">
+      📍 <strong>${l.name}</strong> — ${l.area}
+    </div>
+  `).join('');
+  openOverlay('loc-overlay');
+}
+
+function setLocation(city, area) {
+  document.getElementById('loc-city').textContent = city;
+  document.getElementById('loc-area').textContent = area + ', India';
+  document.getElementById('loc-city-inline').textContent = area;
+  closeOverlay('loc-overlay');
+  showToast(`📍 Location set to ${city}, ${area}`);
+}
+
+function detectLocation() {
+  if (!navigator.geolocation) { showToast('⚠️ Geolocation not supported'); return; }
+  showToast('📡 Detecting your location...');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const { latitude, longitude } = pos.coords;
+      // Find nearest from our list
+      let nearest = LOCATIONS[0], minDist = Infinity;
+      LOCATIONS.forEach(l => {
+        const d = Math.sqrt(Math.pow(l.lat - latitude, 2) + Math.pow(l.lng - longitude, 2));
+        if (d < minDist) { minDist = d; nearest = l; }
+      });
+      setLocation(nearest.name, nearest.area);
+      document.getElementById('loc-city').textContent = `Near ${nearest.name}`;
+    },
+    err => {
+      // Fallback: try IP-based (just simulate)
+      showToast('📍 Using approximate location');
+      setLocation('Connaught Place', 'New Delhi');
+    },
+    { timeout: 8000 }
+  );
+}
+
+function setCustomLoc() {
+  const val = document.getElementById('loc-custom').value.trim();
+  if (!val) { showToast('⚠️ Type a location first'); return; }
+  document.getElementById('loc-city').textContent = val;
+  document.getElementById('loc-area').textContent = 'India';
+  document.getElementById('loc-city-inline').textContent = val;
+  closeOverlay('loc-overlay');
+  showToast(`📍 Location set to ${val}`);
+}
+
+// ══════════════════════════════════════════════════════
+//  RESTAURANTS & MENU
+// ══════════════════════════════════════════════════════
+function renderRestaurants() {
+  const grid = document.getElementById('rest-grid');
+  const filtered = RESTAURANTS.filter(r => activeFilter === 'all' || r.tags.includes(activeFilter));
+  grid.innerHTML = filtered.map(r => `
+    <div class="rest-card ${currentRest?.id===r.id?'sel':''}" onclick="openRest('${r.id}')">
+      <div class="rest-img" style="background:${r.bg}">${r.emoji}</div>
+      <div class="rest-info">
+        <div class="rest-name">${r.name}</div>
+        <div class="rest-cuis">${r.cuisine}</div>
+        <div class="rest-meta">
+          <span class="rating-badge">⭐ ${r.rating}</span>
+          <span style="color:var(--text3)">•</span>
+          <span style="color:var(--text2)">⏱ ${r.time}</span>
+          <span style="color:var(--text3)">•</span>
+          <span style="color:var(--text2)">${r.price}</span>
         </div>
-        <div style="display:flex;align-items:center;gap:0.8rem">
-          <div class="cart-item-price">${item.price}</div>
-          <button class="remove-btn" onclick="removeItem('${item.key}')">×</button>
+        <div class="rest-tags">${r.badges.map(b=>`<span class="rest-tag">${b}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openRest(id) {
+  currentRest = RESTAURANTS.find(r => r.id === id);
+  document.getElementById('rest-grid').style.display = 'none';
+  document.querySelector('.filter-bar').style.display = 'none';
+  document.querySelector('.sec-title').style.display = 'none';
+  document.getElementById('menu-view').style.display = 'block';
+  renderMenu(currentRest);
+}
+
+function closeRest() {
+  currentRest = null;
+  document.getElementById('rest-grid').style.display = 'grid';
+  document.querySelector('.filter-bar').style.display = 'flex';
+  document.querySelector('.sec-title').style.display = 'block';
+  document.getElementById('menu-view').style.display = 'none';
+  renderRestaurants();
+}
+
+function renderMenu(r) {
+  document.getElementById('menu-rest-hdr').innerHTML = `
+    <div class="venue-hdr" onclick="closeRest()">
+      <span class="v-back">← Back</span>
+      <span class="v-emoji">${r.emoji}</span>
+      <div><div class="v-name">${r.name}</div><div class="v-meta">⭐ ${r.rating} · ${r.time} · ${r.price}</div></div>
+    </div>
+  `;
+  const secEmojis = {'Starters':'🥗','Main Course':'🍽️','Mains':'🍽️','Desserts':'🍮','Burgers':'🍔','Sides & Drinks':'🥤','Sides':'🥤','Meals':'🎁','Breads':'🫓','Beverages':'🥛','Noodles & Rice':'🍜','Soups':'🥣','Hot Beverages':'☕','Cold Beverages':'🧊','Food':'🥐','Signature Scoops':'🍦','Sundaes':'✨','Milkshakes':'🥤','Pizzas':'🍕','Accompaniments':'🫙','Biryani':'🍛'};
+  const weirdCombosHTML = renderWeirdCombosSection(r);
+  document.getElementById('menu-secs').innerHTML = weirdCombosHTML + Object.entries(r.menu).map(([s, items]) => `
+    <div class="menu-sec">
+      <div class="menu-sec-title">${secEmojis[s]||'🍴'} ${s} <span style="font-size:.65rem;color:var(--text3);font-weight:400">${items.length} items</span></div>
+      ${items.map(it => renderMI(it)).join('')}
+    </div>
+  `).join('');
+}
+
+function renderWeirdCombosSection(r) {
+  const combos = RESTAURANT_WEIRD_COMBOS[r.id];
+  if (!combos || !combos.length) return '';
+
+  const comboCards = combos.map((combo, ci) => {
+    const items = combo.items.map(id => allItems[id]).filter(Boolean);
+    if (items.length < 2) return '';
+    const emojisHTML = items.map((it,i) => `${i>0?'<span class="wc-plus">+</span>':''}${it.emoji}`).join('');
+    const itemNames = items.map(it=>it.name).join(' + ');
+    const totalPrice = items.reduce((s,it)=>s+it.price,0);
+    const wc = combo.score>=70?'var(--red)':combo.score>=40?'var(--yellow)':'var(--green)';
+    const badgeTxt = combo.score>=70?'🔥 Legendary':combo.score>=40?'⚡ Bold':'✅ Mild';
+    const badgeBg = combo.score>=70?'background:#fff3e0;color:#e65100':combo.score>=40?'background:#fefce8;color:#854d0e':'background:#f0fdf4;color:#15803d';
+    const inCart = combo.items.every(id => cart.find(c=>c.id===id));
+    return `
+      <div class="wc-card" id="wcc-${r.id}-${ci}">
+        <div class="wc-emojis">${emojisHTML}</div>
+        <div class="wc-info">
+          <div class="wc-combo-name">${combo.name}</div>
+          <div class="wc-combo-items">${itemNames}</div>
+          <div style="margin-top:.25rem;display:flex;align-items:center;gap:.4rem">
+            <span class="wc-badge" style="${badgeBg}">${badgeTxt}</span>
+            <span style="font-size:.65rem;color:var(--text3)">₹${totalPrice} total</span>
+          </div>
+          <div style="font-size:.68rem;color:var(--text2);margin-top:.25rem;line-height:1.4">${combo.desc}</div>
         </div>
-      </div>`;
-    }).join('');
-
-    countEl.textContent = `${cart.length} item${cart.length > 1 ? 's' : ''}`;
-    totalEl.textContent = total;
-  }
-
-  // ── WEIRDNESS ENGINE ──────────────────────────────────────────────
-  function computeWeirdness() {
-    if (cart.length < 2) return 0;
-
-    let maxScore = 0;
-    const keys = cart.map(c => c.key);
-
-    // check pairs
-    for (let i = 0; i < keys.length; i++) {
-      for (let j = i + 1; j < keys.length; j++) {
-        const pair1 = `${keys[i]}+${keys[j]}`;
-        const pair2 = `${keys[j]}+${keys[i]}`;
-        const s = WEIRD_PAIRS[pair1] || WEIRD_PAIRS[pair2] || 0;
-        maxScore = Math.max(maxScore, s);
-      }
-    }
-
-    // category diversity bonus
-    const cats = [...new Set(cart.map(c => c.cat))];
-    if (cats.length >= 3) maxScore = Math.min(100, maxScore + 10);
-
-    // dessert + main = inherently weird
-    if (cats.includes('Dessert') && cats.includes('Main') && !maxScore) maxScore = 30;
-
-    return maxScore;
-  }
-
-  function updateWeirdness() {
-    const score = computeWeirdness();
-    const scoreEl = document.getElementById('weirdness-score');
-    const tierEl = document.getElementById('weirdness-tier');
-    const fill = document.getElementById('meter-fill');
-    const darePrompt = document.getElementById('dare-prompt');
-
-    scoreEl.textContent = score;
-    fill.style.width = score + '%';
-
-    if (score === 0) {
-      scoreEl.style.color = 'var(--muted)';
-      fill.style.background = 'var(--border)';
-      tierEl.style.color = 'var(--muted)';
-      tierEl.textContent = cart.length < 2 ? '— Add more items' : '— Normal combo';
-      darePrompt.classList.remove('visible');
-    } else if (score < 40) {
-      scoreEl.style.color = 'var(--green)';
-      fill.style.background = 'var(--green)';
-      tierEl.style.color = 'var(--green)';
-      tierEl.textContent = '🟢 Mild Weird';
-      darePrompt.classList.remove('visible');
-    } else if (score < 70) {
-      scoreEl.style.color = 'var(--yellow)';
-      fill.style.background = 'var(--yellow)';
-      tierEl.style.color = 'var(--yellow)';
-      tierEl.textContent = '🟡 Bold Combo';
-      showDarePrompt(score);
-    } else {
-      scoreEl.style.color = 'var(--orange)';
-      fill.style.background = 'linear-gradient(90deg, var(--orange), var(--red))';
-      tierEl.style.color = 'var(--orange)';
-      tierEl.textContent = '🔥 LEGENDARY WEIRD';
-      showDarePrompt(score);
-    }
-  }
-
-  function showDarePrompt(score) {
-    const prompt = document.getElementById('dare-prompt');
-    const text = document.getElementById('dare-text');
-    if (score >= 70) {
-      text.textContent = 'Only ' + Math.floor(Math.random()*3+1) + '% of users have tried this combination. This could be a legendary submission. Are you brave enough?';
-    } else {
-      text.textContent = 'This is an unusual combination. Dare to try it and submit to the leaderboard for community judgment!';
-    }
-    prompt.classList.add('visible');
-  }
-
-  function acceptDare() {
-    placeOrder();
-  }
-
-  function declineDare() {
-    document.getElementById('dare-prompt').classList.remove('visible');
-    showToast('Maybe next time... 👀');
-  }
-
-  // ── RECOMMENDATIONS ───────────────────────────────────────────────
-  function updateRecs() {
-    const grid = document.getElementById('recs-grid');
-    if (cart.length === 0) {
-      grid.innerHTML = '<div style="color:var(--muted);font-size:0.65rem;grid-column:span 4;padding:1rem 0;text-align:center">Add items to see recommendations</div>';
-      return;
-    }
-
-    const cartKeys = cart.map(c => c.key);
-    const mainItem = cartKeys[0];
-
-    // get complements
-    let recs = (COMPLEMENT_RECS[mainItem] || COMPLEMENT_RECS.default)
-      .filter(k => !cartKeys.includes(k))
-      .slice(0, 3);
-
-    // dare slot: find something weird
-    const allKeys = Object.keys(ALL_ITEMS);
-    let dareSlot = allKeys.find(k => {
-      if (cartKeys.includes(k) || recs.includes(k)) return false;
-      const pair = `${mainItem}+${k}`;
-      const pair2 = `${k}+${mainItem}`;
-      return (WEIRD_PAIRS[pair] || WEIRD_PAIRS[pair2] || 0) > 50;
-    });
-    if (!dareSlot) {
-      dareSlot = allKeys.find(k => !cartKeys.includes(k) && !recs.includes(k));
-    }
-
-    grid.innerHTML = recs.map(k => {
-      const item = ALL_ITEMS[k];
-      return `<div class="rec-card" onclick="addRecommended('${k}')">
-        <span class="rec-badge">Rec</span>
-        <span class="rec-emoji">${item.emoji}</span>
-        <div class="rec-name">${item.name}</div>
-        <div class="rec-price">₹${item.price}</div>
-      </div>`;
-    }).join('') + (dareSlot ? `<div class="rec-card dare-card" onclick="addRecommended('${dareSlot}')">
-        <span class="rec-badge">DARE</span>
-        <span class="rec-emoji">${ALL_ITEMS[dareSlot].emoji}</span>
-        <div class="rec-name">${ALL_ITEMS[dareSlot].name}</div>
-        <div class="rec-price">₹${ALL_ITEMS[dareSlot].price}</div>
-      </div>` : '');
-  }
-
-  function addRecommended(key) {
-    if (cart.find(c => c.key === key)) { showToast('Already in cart!'); return; }
-    cart.push({ key, ...ALL_ITEMS[key] });
-    renderCart();
-    updateWeirdness();
-    updateRecs();
-    showToast(`${ALL_ITEMS[key].emoji} ${ALL_ITEMS[key].name} added!`);
-  }
-
-  // ── ORDER FLOW ────────────────────────────────────────────────────
-  function placeOrder() {
-    if (cart.length === 0) { showToast('Add some items first!'); return; }
-    const score = computeWeirdness();
-    if (score >= 40) {
-      // auto-show submit
-      showToast('🎉 Order placed! Submit your combo below.');
-      document.getElementById('dare-prompt').classList.remove('visible');
-    } else {
-      showToast('✅ Order placed successfully!');
-    }
-  }
-
-  function submitCombo() {
-    if (cart.length < 2) { showToast('Add at least 2 items!'); return; }
-    const name = document.getElementById('combo-name-input').value.trim();
-    if (!name) { showToast('Name your combo first!'); return; }
-
-    const score = computeWeirdness();
-    const taste = Math.max(5, 100 - score + Math.floor(Math.random() * 20 - 10));
-    const newEntry = {
-      name,
-      items: cart.map(c => c.name),
-      weird: score,
-      taste,
-      likes: Math.floor(Math.random() * 50) + 1,
-      user: '@you',
-      isNew: true
-    };
-
-    LEADERBOARD_DATA.unshift(newEntry);
-    LEADERBOARD_DATA.sort((a, b) => b.weird - a.weird);
-    const rank = LEADERBOARD_DATA.findIndex(e => e.name === name) + 1;
-
-    renderLeaderboard();
-    document.getElementById('combo-name-input').value = '';
-    showModal(name, score, taste, rank);
-  }
-
-  // ── LEADERBOARD ───────────────────────────────────────────────────
-  function setFilter(f, btn) {
-    currentFilter = f;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderLeaderboard();
-  }
-
-  function getWeirdColor(score) {
-    if (score >= 70) return 'var(--orange)';
-    if (score >= 40) return 'var(--yellow)';
-    return 'var(--green)';
-  }
-  function getWeirdLabel(score) {
-    if (score >= 70) return '🔥 LEGENDARY';
-    if (score >= 40) return '⚡ BOLD';
-    return '✓ MILD';
-  }
-  function getWeirdLabelColor(score) {
-    if (score >= 70) return 'color:var(--orange);border:1px solid var(--orange)';
-    if (score >= 40) return 'color:var(--yellow);border:1px solid var(--yellow)';
-    return 'color:var(--green);border:1px solid var(--green)';
-  }
-
-  function renderLeaderboard() {
-    let data = [...LEADERBOARD_DATA];
-    if (currentFilter === 'legendary') data = data.filter(e => e.weird >= 70);
-    else if (currentFilter === 'bold') data = data.filter(e => e.weird >= 40 && e.weird < 70);
-    else if (currentFilter === 'mild') data = data.filter(e => e.weird < 40);
-
-    const rankClasses = ['gold', 'silver', 'bronze'];
-
-    document.getElementById('leaderboard-list').innerHTML = data.map((entry, i) => {
-      const rankClass = i < 3 ? rankClasses[i] : 'other';
-      return `<div class="lb-entry" onclick="likeEntry(${LEADERBOARD_DATA.indexOf(entry)})">
-        <div class="lb-rank ${rankClass}">${i + 1}</div>
-        <div class="lb-info">
-          <div class="lb-combo-name">${entry.name} ${entry.isNew ? '<span style="color:var(--orange);font-size:0.55rem">NEW</span>' : ''}</div>
-          <div class="lb-combo-items">${entry.items.join(' + ')}</div>
-          <div style="margin-top:4px"><span class="lb-weird-badge" style="${getWeirdLabelColor(entry.weird)}">${getWeirdLabel(entry.weird)}</span></div>
+        <div class="wc-score-wrap">
+          <div class="wc-score" style="color:${wc}">${combo.score}</div>
+          <div class="wc-score-lbl">Weirdness</div>
+          <button class="wc-add-one ${inCart?'in':''}" data-ids="${combo.items.join(',')}" onclick="addWeirdCombo(this, event)">
+            ${inCart?'✓ Added':'Add All'}
+          </button>
         </div>
-        <div class="lb-scores">
-          <div class="lb-weird-score" style="color:${getWeirdColor(entry.weird)}">${entry.weird}</div>
-          <div class="lb-likes">♥ ${entry.likes.toLocaleString()}</div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="wc-section">
+      <div class="wc-section-title">🔥 Weird Combos — Dare to Try?</div>
+      <div class="wc-section-sub">Community-discovered unusual combinations from ${r.name} that people actually ordered. High weirdness = high leaderboard potential.</div>
+      <div class="wc-grid">${comboCards}</div>
+    </div>
+  `;
+}
+
+function addWeirdCombo(btn, ev) {
+  ev.stopPropagation();
+  const itemIds = btn.dataset.ids.split(',');
+  let added = 0;
+  itemIds.forEach(id => {
+    const it = allItems[id]; if (!it) return;
+    if (!cart.find(c=>c.id===id)) { cart.push({...it,qty:1}); added++; }
+  });
+  renderCart(); updateWeird(); updateRecs();
+  if (currentRest) renderMenu(currentRest);
+  if (added > 0) showToast(`🔥 ${added} weird combo item${added>1?'s':''} added to cart!`);
+  else showToast('All items already in cart!');
+  checkSimilarCombos();
+}
+
+function renderMI(it) {
+  const ci = cart.find(c => c.id === it.id);
+  const qty = ci ? ci.qty : 0;
+  return `
+    <div class="menu-item" id="mi-${it.id}">
+      <div class="mi-left">
+        <div class="vd ${it.veg?'veg':'nv'}"></div>
+        <span class="mi-emoji">${it.emoji}</span>
+        <div class="mi-info">
+          ${it.bs?'<span class="bs-badge">⭐ Bestseller</span>':''}
+          <div class="mi-name">${it.name}</div>
+          <div class="mi-desc">${it.desc}</div>
         </div>
-      </div>`;
-    }).join('');
-  }
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.35rem;flex-shrink:0">
+        <div class="mi-price">₹${it.price}</div>
+        ${qty===0
+          ? `<button class="add-btn" onclick="addToCart('${it.id}')">ADD</button>`
+          : `<div class="qty-ctrl"><button class="q-btn" onclick="chgQty('${it.id}',-1)">−</button><span class="q-num">${qty}</span><button class="q-btn" onclick="chgQty('${it.id}',1)">+</button></div>`
+        }
+      </div>
+    </div>
+  `;
+}
 
-  function likeEntry(idx) {
-    LEADERBOARD_DATA[idx].likes++;
-    renderLeaderboard();
-  }
+// ══════════════════════════════════════════════════════
+//  CART
+// ══════════════════════════════════════════════════════
+function addToCart(id) {
+  const it = allItems[id];
+  if (!it) return;
+  const ex = cart.find(c => c.id === id);
+  if (ex) ex.qty++;
+  else cart.push({ ...it, qty: 1 });
+  renderCart(); updateWeird(); updateRecs();
+  if (currentRest) renderMenu(currentRest);
+  showToast(`${it.emoji} ${it.name} added!`);
+  checkSimilarCombos();
+}
 
-  // ── MODAL ─────────────────────────────────────────────────────────
-  function showModal(name, weird, taste, rank) {
-    document.getElementById('modal-title').textContent = '🔥 COMBO SUBMITTED!';
-    document.getElementById('modal-subtitle').textContent = `"${name}" is now live. The community will judge your food choices.`;
-    document.getElementById('modal-weird').textContent = weird;
-    document.getElementById('modal-taste').textContent = taste;
-    document.getElementById('modal-rank').textContent = '#' + rank;
-    document.getElementById('modal').classList.add('open');
-  }
+function chgQty(id, d) {
+  const i = cart.findIndex(c => c.id === id);
+  if (i === -1) return;
+  cart[i].qty += d;
+  if (cart[i].qty <= 0) cart.splice(i, 1);
+  renderCart(); updateWeird(); updateRecs();
+  if (currentRest) renderMenu(currentRest);
+  checkSimilarCombos();
+}
 
-  function closeModal() {
-    document.getElementById('modal').classList.remove('open');
-  }
+function renderCart() {
+  const body = document.getElementById('c-body');
+  const foot = document.getElementById('c-foot');
+  const sub = document.getElementById('c-sub');
+  const wc = document.getElementById('w-card');
+  const rc = document.getElementById('r-card');
+  const cnt = document.getElementById('hdr-cnt');
+  const total = cart.reduce((s,c) => s + c.price * c.qty, 0);
+  const qty = cart.reduce((s,c) => s + c.qty, 0);
+  if (cnt) cnt.textContent = qty;
 
-  // ── TOAST ─────────────────────────────────────────────────────────
-  let toastTimer;
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  if (!cart.length) {
+    body.innerHTML = `<div class="empty-cart"><div class="empty-em">🍽️</div><div class="empty-txt">Your cart is empty<br>Add items to get started!</div></div>`;
+    foot.style.display = 'none'; wc.style.display = 'none'; rc.style.display = 'none';
+    sub.textContent = 'Add items from any restaurant'; return;
   }
+  const rests = [...new Set(cart.map(c => c.restId))];
+  sub.textContent = rests.length > 1 ? `${rests.length} restaurants · ${qty} item${qty>1?'s':''}` : `${cart[0].restName} · ${qty} item${qty>1?'s':''}`;
+  body.innerHTML = `<div class="c-list">${cart.map(c => `
+    <div class="ci-row">
+      <span class="ci-em">${c.emoji}</span>
+      <div class="ci-inf"><div class="ci-nm">${c.name}</div><div class="ci-rs">${c.restName}</div></div>
+      <div class="qty-ctrl"><button class="q-btn" onclick="chgQty('${c.id}',-1)">−</button><span class="q-num">${c.qty}</span><button class="q-btn" onclick="chgQty('${c.id}',1)">+</button></div>
+      <div class="ci-pr">₹${c.price*c.qty}</div>
+    </div>`).join('')}</div>`;
+  foot.style.display = 'block'; wc.style.display = 'block'; rc.style.display = 'block';
+  document.getElementById('b-sub').textContent = `₹${total}`;
+  document.getElementById('b-tot').textContent = `₹${total + 35}`;
+}
 
-  // ── FIX SELECT DISPLAY ────────────────────────────────────────────
-  document.getElementById('item-select').querySelectorAll('option').forEach(opt => {
-    if (opt.value) {
-      const parts = opt.value.split('|');
-      opt.textContent = `${parts[1]} ${parts[2]} — ₹${parts[3]}`;
+// ══════════════════════════════════════════════════════
+//  SIMILAR COMBO DETECTION — boosts leaderboard rating
+// ══════════════════════════════════════════════════════
+function checkSimilarCombos() {
+  if (cart.length < 2) return;
+  const cartIds = new Set(cart.map(c => c.id));
+  const db = getDB();
+  let boosted = null;
+  db.leaderboard.forEach(entry => {
+    if (!entry.itemIds || !entry.itemIds.length) return;
+    const matches = entry.itemIds.filter(id => cartIds.has(id)).length;
+    const similarity = matches / entry.itemIds.length;
+    if (similarity >= 0.5 && matches >= 2) {
+      entry.likes += Math.floor(Math.random() * 3) + 1;
+      if (!entry._trending) { entry._trending = true; boosted = entry; }
     }
   });
+  if (boosted) {
+    saveDB(db);
+    showSimilarNotif(boosted);
+  }
+}
 
-  // ── INIT ──────────────────────────────────────────────────────────
-  renderLeaderboard();
-  updateRecs();
+function showSimilarNotif(entry) {
+  const n = document.getElementById('sim-notif');
+  document.getElementById('sim-n-body').textContent = `Your cart is similar to "${entry.name}" on the leaderboard! Rating boosted 📈`;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 5000);
+}
+
+// ══════════════════════════════════════════════════════
+//  WEIRDNESS ENGINE
+// ══════════════════════════════════════════════════════
+function computeWeird() {
+  if (cart.length < 2) return 0;
+  const ids = cart.map(c => c.id);
+  const rests = [...new Set(cart.map(c => c.restId))];
+  let score = rests.length >= 2 ? 20 + (rests.length >= 3 ? 15 : 0) : 0;
+  for (let i = 0; i < ids.length; i++) for (let j = i+1; j < ids.length; j++) {
+    score = Math.max(score, WEIRD_PAIRS[`${ids[i]}+${ids[j]}`] || WEIRD_PAIRS[`${ids[j]}+${ids[i]}`] || 0);
+  }
+  const dessert = cart.some(c => ['🍦','🍮','🎂','🍫','🍡'].includes(c.emoji));
+  const main = cart.some(c => ['🍛','🍗','🍖','🌶️'].includes(c.emoji));
+  if (dessert && main && score < 45) score = 45;
+  return Math.min(100, score);
+}
+
+function updateWeird() {
+  if (!cart.length) return;
+  const score = computeWeird();
+  const num = document.getElementById('w-num');
+  const tier = document.getElementById('w-tier');
+  const bar = document.getElementById('w-bar');
+  const dare = document.getElementById('dare-box');
+  num.textContent = score; bar.style.width = score + '%';
+  if (score === 0 || cart.length < 2) {
+    num.style.color='var(--text2)'; bar.style.background='var(--border)';
+    tier.style.color='var(--text3)'; tier.textContent='Add more items'; dare.classList.remove('vis');
+  } else if (score < 40) {
+    num.style.color='var(--green)'; bar.style.background='var(--green)';
+    tier.style.color='var(--green)'; tier.textContent='✅ Mild Weird'; dare.classList.remove('vis');
+  } else if (score < 70) {
+    num.style.color='var(--yellow)'; bar.style.background='var(--yellow)';
+    tier.style.color='var(--yellow)'; tier.textContent='⚡ Bold Combo'; triggerDare(score);
+  } else {
+    num.style.color='var(--red)'; bar.style.background='linear-gradient(90deg,var(--orange),var(--red))';
+    tier.style.color='var(--red)'; tier.textContent='🔥 LEGENDARY WEIRD'; triggerDare(score);
+  }
+}
+
+function triggerDare(score) {
+  const box = document.getElementById('dare-box');
+  const body = document.getElementById('dare-body');
+  const rests = [...new Set(cart.map(c => c.restId))];
+  body.textContent = rests.length > 1
+    ? `Cross-restaurant combo from ${rests.length} places! Only the bravest attempt this. Submit to the leaderboard?`
+    : `Only ~${Math.floor(Math.random()*3+1)}% of users have tried this combo. Are you daring enough?`;
+  box.classList.add('vis');
+}
+
+function acceptDare() { placeOrder(); }
+function skipDare() { document.getElementById('dare-box').classList.remove('vis'); showToast('Maybe next time... 👀'); }
+
+// ══════════════════════════════════════════════════════
+//  RECOMMENDATIONS
+// ══════════════════════════════════════════════════════
+function updateRecs() {
+  if (!cart.length) return;
+  const cartIds = cart.map(c => c.id);
+  const p = cart[0];
+  let key = 'default';
+  if (p.name.toLowerCase().includes('biryani')) key = 'biryani';
+  else if (p.name.toLowerCase().includes('burger')) key = 'burger';
+  else if (p.name.toLowerCase().includes('pizza')) key = 'pizza';
+  else if (['🍦','🍮','🍫','🎂'].includes(p.emoji)) key = 'dessert';
+
+  const recs = (COMP_MAP[key]||COMP_MAP.default).filter(id=>!cartIds.includes(id)).slice(0,3);
+  let dareId = null;
+  for (const id of cartIds) {
+    for (const k of Object.keys(WEIRD_PAIRS)) {
+      const [a,b] = k.split('+');
+      if (a===id && !cartIds.includes(b)){dareId=b;break}
+      if (b===id && !cartIds.includes(a)){dareId=a;break}
+    }
+    if (dareId) break;
+  }
+
+  const scroll = document.getElementById('r-scroll');
+  scroll.innerHTML = recs.map(id => {
+    const it = allItems[id]; if (!it) return '';
+    return `<div class="rec-p" onclick="addToCart('${id}')"><span class="rec-em">${it.emoji}</span><div class="rec-nm">${it.name}</div><div class="rec-pr">₹${it.price}</div><span class="rec-badge rb-n">ADD</span></div>`;
+  }).join('') + (dareId && allItems[dareId] ? `
+    <div class="rec-p dare" onclick="addToCart('${dareId}')"><span class="rec-em">${allItems[dareId].emoji}</span><div class="rec-nm">${allItems[dareId].name}</div><div class="rec-pr">₹${allItems[dareId].price}</div><span class="rec-badge rb-d">🔥 DARE</span></div>` : '');
+}
+
+// ══════════════════════════════════════════════════════
+//  PHOTO UPLOAD
+// ══════════════════════════════════════════════════════
+function previewPhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    photoDataURL = e.target.result;
+    const prev = document.getElementById('photo-preview');
+    prev.src = photoDataURL; prev.style.display = 'block';
+    document.getElementById('photo-placeholder').textContent = '✅ Photo selected — tap to change';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ══════════════════════════════════════════════════════
+//  LEADERBOARD
+// ══════════════════════════════════════════════════════
+function renderLB() {
+  const db = getDB();
+  let data = [...db.leaderboard];
+  if (lbFilter==='legendary') data = data.filter(e=>e.weird>=70);
+  else if (lbFilter==='bold') data = data.filter(e=>e.weird>=40&&e.weird<70);
+  else if (lbFilter==='mild') data = data.filter(e=>e.weird<40);
+  data.sort((a,b)=>b.weird-a.weird);
+
+  const totalVotes = db.leaderboard.reduce((s,e)=>s+e.likes,0);
+  document.getElementById('lb-total').textContent = db.leaderboard.length + 132;
+  document.getElementById('lb-votes').textContent = (totalVotes + 28000).toLocaleString('en-IN');
+
+  const rClasses = ['rg','rs','rb','ro'];
+  document.getElementById('lb-list').innerHTML = data.map((e,i) => {
+    const rc = rClasses[Math.min(i,3)];
+    const wc = e.weird>=70?'var(--red)':e.weird>=40?'var(--yellow)':'var(--green)';
+    const badges = [
+      e.weird>=70?'<span class="lb-badge bb-leg">🔥 Legendary</span>':e.weird>=40?'<span class="lb-badge bb-bold">⚡ Bold</span>':'<span class="lb-badge bb-mild">✅ Mild</span>',
+      e.verified?'<span class="lb-badge bb-ver">✓ Verified</span>':'',
+      e.isNew?'<span class="lb-badge bb-new">🆕 New</span>':'',
+      e._trending?'<span class="lb-badge bb-hot">📈 Trending</span>':'',
+    ].join('');
+    const photo = e.photo
+      ? `<div class="lb-photo"><img src="${e.photo}" alt="${e.name}" width="70" height="70"></div>`
+      : `<div class="lb-photo" style="background:linear-gradient(135deg,#fff0f0,#fff5ee);font-size:2rem">${getComboEm(e.weird)}</div>`;
+    return `
+      <div class="lb-card ${e.isNew?'new-e':''}">
+        <div class="lb-rank ${rc}">${i+1}</div>
+        ${photo}
+        <div class="lb-inf">
+          <div class="lb-cname">${e.name}</div>
+          <div class="lb-citems">${e.items.join(' + ')}</div>
+          <div class="lb-badges">${badges}</div>
+          <div class="lb-user">${e.user}</div>
+        </div>
+        <div class="lb-scores">
+          <div class="lb-wbig" style="color:${wc}">${e.weird}</div>
+          <div class="lb-wlab">Weirdness</div>
+          <div class="lb-likes"><button class="like-btn" onclick="likeEntry('${e.id}',event)">♥</button>${e.likes.toLocaleString()}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function getComboEm(s){ return s>=80?'🤯':s>=60?'😱':s>=40?'😅':'😋'; }
+
+function likeEntry(id, ev) {
+  ev.stopPropagation();
+  const db = getDB();
+  const e = db.leaderboard.find(x=>x.id===id);
+  if (e) { e.likes++; saveDB(db); renderLB(); }
+}
+
+function setLbF(f, btn) {
+  lbFilter = f;
+  document.querySelectorAll('#lb-view .filter-bar .chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLB();
+}
+
+// ══════════════════════════════════════════════════════
+//  SUBMIT COMBO
+// ══════════════════════════════════════════════════════
+function submitCombo() {
+  const db = getDB();
+  if (!db.currentUser) { openAuth('login'); showToast('⚠️ Sign in to submit combos!'); return; }
+  if (cart.length < 2) { showToast('⚠️ Add at least 2 items to cart!'); return; }
+  if (!photoDataURL) { showToast('📸 Please upload a photo of your combo!'); return; }
+  const name = document.getElementById('combo-name').value.trim();
+  if (!name) { showToast('⚠️ Name your combo first!'); return; }
+
+  const score = computeWeird();
+  const taste = Math.max(5, 100 - score + Math.floor(Math.random()*20 - 10));
+  const entry = {
+    id: 'lb' + Date.now(),
+    name,
+    items: cart.map(c=>c.name),
+    itemIds: cart.map(c=>c.id),
+    weird: score, taste, likes: 1,
+    user: '@' + db.currentUser.name.toLowerCase().replace(/\s+/g,'_'),
+    photo: photoDataURL,
+    isNew: true,
+    verified: false,
+    ts: Date.now()
+  };
+
+  db.leaderboard.push(entry);
+  db.leaderboard.sort((a,b)=>b.weird-a.weird);
+  const rank = db.leaderboard.findIndex(e=>e.id===entry.id)+1;
+  saveDB(db);
+
+  document.getElementById('combo-name').value = '';
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('photo-placeholder').textContent = '📸 Upload your combo photo';
+  photoDataURL = null;
+
+  renderLB();
+  document.getElementById('m-w').textContent = score;
+  document.getElementById('m-t').textContent = taste;
+  document.getElementById('m-r').textContent = '#' + rank;
+  document.getElementById('s-sub').textContent = `"${name}" is now live! The community will judge your taste.`;
+  openOverlay('success-overlay');
+}
+
+function onSuccessClose() {
+  closeOverlay('success-overlay');
+  setTab('lb', document.querySelectorAll('.page-tab')[1]);
+}
+
+// ══════════════════════════════════════════════════════
+//  ORDER
+// ══════════════════════════════════════════════════════
+function placeOrder() {
+  if (!cart.length) { showToast('⚠️ Add some items first!'); return; }
+  const db = getDB();
+  if (!db.currentUser) { openAuth('login'); showToast('⚠️ Sign in to place an order!'); return; }
+  const score = computeWeird();
+  document.getElementById('dare-box').classList.remove('vis');
+  if (score >= 40) {
+    showToast('🎉 Order placed! Now submit your combo to the leaderboard!');
+    setTab('lb', document.querySelectorAll('.page-tab')[1]);
+  } else {
+    showToast('✅ Order placed successfully!');
+    cart = [];
+    renderCart();
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  TABS / FILTERS / SEARCH
+// ══════════════════════════════════════════════════════
+function setTab(t, btn) {
+  document.querySelectorAll('.page-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('rest-view').style.display = t==='rest'?'block':'none';
+  document.getElementById('lb-view').style.display = t==='lb'?'block':'none';
+  if (t==='lb') renderLB();
+}
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-bar .chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  closeRest();
+  renderRestaurants();
+}
+
+function handleSearch(v) {
+  if (!v || currentRest) return;
+  const l = v.toLowerCase();
+  const m = RESTAURANTS.filter(r=>r.name.toLowerCase().includes(l)||r.cuisine.toLowerCase().includes(l));
+  const g = document.getElementById('rest-grid');
+  g.innerHTML = m.map(r=>`
+    <div class="rest-card" onclick="openRest('${r.id}')">
+      <div class="rest-img" style="background:${r.bg}">${r.emoji}</div>
+      <div class="rest-info">
+        <div class="rest-name">${r.name}</div>
+        <div class="rest-cuis">${r.cuisine}</div>
+        <div class="rest-meta"><span class="rating-badge">⭐ ${r.rating}</span><span style="color:var(--text2);margin-left:.4rem">⏱ ${r.time}</span></div>
+      </div>
+    </div>`).join('') || '<div style="padding:2rem;color:var(--text2);grid-column:span 3;text-align:center">No restaurants found for "<strong>'+v+'</strong>"</div>';
+}
+
+// ── HELPERS ──
+function openOverlay(id){ document.getElementById(id).classList.add('open'); }
+function closeOverlay(id){ document.getElementById(id).classList.remove('open'); }
+function scrollToCart(){ document.getElementById('right').scrollIntoView({behavior:'smooth'}); }
+
+let toastT;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(()=>el.classList.remove('show'), 2800);
+}
+
+// ══════════════════════════════════════════════════════
+//  JSON DB ADMIN PANEL
+// ══════════════════════════════════════════════════════
+let dbTabActive = 'overview';
+
+function toggleDbPanel() {
+  const p = document.getElementById('db-panel');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) renderDbPanel();
+}
+
+function setDbTab(tab, btn) {
+  dbTabActive = tab;
+  document.querySelectorAll('.db-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDbPanel();
+}
+
+function renderDbPanel() {
+  const db = getDB();
+  const body = document.getElementById('db-body');
+
+  if (dbTabActive === 'overview') {
+    const dbSize = (JSON.stringify(db).length / 1024).toFixed(1);
+    body.innerHTML = `
+      <div class="db-stats">
+        <div class="db-stat-box"><div class="db-stat-n" style="color:var(--red)">${db.leaderboard.length}</div><div class="db-stat-l">Combos</div></div>
+        <div class="db-stat-box"><div class="db-stat-n" style="color:var(--green)">${db.users.length}</div><div class="db-stat-l">Users</div></div>
+        <div class="db-stat-box"><div class="db-stat-n" style="color:var(--orange)">${dbSize}KB</div><div class="db-stat-l">DB Size</div></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--text2);margin-bottom:.6rem;background:var(--bg);padding:.6rem .8rem;border-radius:8px;line-height:1.6">
+        <strong>Storage:</strong> Browser localStorage<br>
+        <strong>Key:</strong> <code style="background:var(--border);padding:.1rem .3rem;border-radius:3px;font-size:.65rem">weirdeats_db</code><br>
+        <strong>Current user:</strong> ${db.currentUser ? db.currentUser.name + ' (' + db.currentUser.email + ')' : 'Not signed in'}<br>
+        <strong>With photos:</strong> ${db.leaderboard.filter(e=>e.photo).length} entries
+      </div>
+      <div class="db-actions">
+        <button class="db-btn db-btn-dl" onclick="downloadJSON()">⬇ Download .json</button>
+        <label class="db-btn db-btn-imp">📂 Import .json<input type="file" accept=".json" onchange="importJSON(this)"></label>
+        <button class="db-btn db-btn-reset" onclick="resetDB()">🗑 Reset</button>
+      </div>
+    `;
+  } else if (dbTabActive === 'leaderboard') {
+    body.innerHTML = db.leaderboard.length ? db.leaderboard.map((e,i) => `
+      <div class="db-entry">
+        <div class="db-entry-name">
+          ${e.photo ? `<img class="db-entry-photo" src="${e.photo}" alt="">` : '<span style="font-size:1.2rem">'+getComboEm(e.weird)+'</span>'}
+          <span>#${i+1} ${e.name}</span>
+          <span style="margin-left:auto;font-size:.7rem;font-weight:800;color:${e.weird>=70?'var(--red)':e.weird>=40?'var(--yellow)':'var(--green)'}">${e.weird}</span>
+        </div>
+        <div class="db-entry-meta">
+          ${e.user} · ♥ ${e.likes.toLocaleString()} · ${e.items.join(', ')}<br>
+          <span style="color:var(--text3)">${new Date(e.ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</span>
+          ${e.verified?'<span style="color:#1d4ed8;margin-left:.3rem">✓ Verified</span>':''}
+          ${e.photo?'<span style="color:var(--green);margin-left:.3rem">📸 Has photo</span>':'<span style="color:var(--text3);margin-left:.3rem">No photo</span>'}
+        </div>
+      </div>
+    `).join('') : '<div class="db-empty">No leaderboard entries yet</div>';
+  } else if (dbTabActive === 'users') {
+    body.innerHTML = db.users.length ? db.users.map(u => `
+      <div class="db-entry">
+        <div class="db-entry-name">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;flex-shrink:0">${u.name[0].toUpperCase()}</div>
+          ${u.name}
+          ${db.currentUser?.id===u.id?'<span style="font-size:.6rem;background:#e8f5e9;color:#2e7d32;padding:.1rem .35rem;border-radius:10px;font-weight:700">ACTIVE</span>':''}
+        </div>
+        <div class="db-entry-meta">
+          📧 ${u.email} · 🆔 ${u.id}<br>
+          <span style="color:var(--text3)">Joined: ${new Date(u.joinedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+        </div>
+      </div>
+    `).join('') : '<div class="db-empty">No registered users yet.<br>Sign up to see accounts here!</div>';
+  } else if (dbTabActive === 'raw') {
+    // Strip photo data for readability in raw view
+    const displayDb = JSON.parse(JSON.stringify(db));
+    displayDb.leaderboard.forEach(e => { if(e.photo) e.photo = '[base64 photo data]'; });
+    body.innerHTML = `
+      <div class="db-json-wrap"><div class="db-json">${JSON.stringify(displayDb, null, 2).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div></div>
+      <div class="db-actions">
+        <button class="db-btn db-btn-dl" onclick="downloadJSON()">⬇ Download Full .json</button>
+        <button class="db-btn" style="background:var(--bg);color:var(--text);border:1.5px solid var(--border)" onclick="copyJSON()">📋 Copy</button>
+      </div>
+    `;
+  }
+}
+
+function downloadJSON() {
+  const db = getDB();
+  const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `weirdeats_db_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ JSON file downloaded!');
+}
+
+function copyJSON() {
+  const db = getDB();
+  const displayDb = JSON.parse(JSON.stringify(db));
+  displayDb.leaderboard.forEach(e => { if(e.photo) e.photo = '[base64 photo data - stripped for copy]'; });
+  navigator.clipboard.writeText(JSON.stringify(displayDb, null, 2))
+    .then(() => showToast('📋 JSON copied to clipboard!'))
+    .catch(() => showToast('⚠️ Copy failed — try downloading instead'));
+}
+
+function importJSON(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.leaderboard || !data.users) throw new Error('Invalid format');
+      saveDB(data);
+      renderDbPanel();
+      renderLB();
+      updateAuthUI();
+      showToast('✅ Database imported successfully!');
+    } catch(err) {
+      showToast('⚠️ Invalid JSON file — ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetDB() {
+  if (!confirm('Reset database? This will clear all users, combos, and photos.')) return;
+  localStorage.removeItem(DB_KEY);
+  initDB();
+  cart = [];
+  renderCart();
+  renderLB();
+  updateAuthUI();
+  renderDbPanel();
+  showToast('🗑️ Database reset to defaults');
+}
 </script>
 </body>
 </html>
